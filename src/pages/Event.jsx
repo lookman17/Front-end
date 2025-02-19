@@ -15,7 +15,7 @@ const Events = () => {
       console.log("Full API Response:", res.data);
       const data = Array.isArray(res.data.data) ? res.data.data : [];
       console.log("Parsed Events:", data);
-      setEvents(data); // Pastikan setEvents dijalankan dengan data yang benar
+      setEvents(data);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error("Error fetching data:", error.message);
@@ -68,8 +68,8 @@ const Events = () => {
             {isLoading ? (
               <div>Loading...</div>
             ) : events.length > 0 ? (
-              events.map((events) => (
-                <EventCard key={events.id} data={events} onDelete={handleDelete} />
+              events.map((event) => (
+                <EventCard key={event.id} data={event} onDelete={handleDelete} />
               ))
             ) : (
               <div className="text-gray-500">Tidak ada event yang tersedia.</div>

@@ -2,81 +2,95 @@ import React from "react";
 import { FaPen, FaTrash, FaInfoCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-export const GalleryCard = ({ data, onDelete }) => {
+const GalleryCard = ({ data, onDelete }) => {
   const navigate = useNavigate();
 
+  // Fungsi untuk memformat tanggal
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString("id-ID", {
       weekday: "long",
       day: "2-digit",
-      month: "2-digit",
+      month: "long",
       year: "numeric",
     });
   };
 
+  // Fungsi untuk menangani penghapusan konten
   const handleDelete = async () => {
-    // Confirm before deleting
     const isConfirmed = window.confirm(
-      "Are you sure you want to delete this item?"
+      "Apakah Anda yakin ingin menghapus konten ini?"
     );
     if (!isConfirmed) return;
 
     try {
-      const response = await fetch(`/api/content/${data.id}`, {
+      const response = await fetch(`http://localhost:8000/api/content/${data.id}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      const result = await response.json();
       if (response.ok) {
-        alert("Data deleted successfully!");
-        onDelete(data.id); // Remove the item from state
+        alert("Konten berhasil dihapus!");
+        onDelete(data.id);
       } else {
-        alert(result.message || "Failed to delete data");
+        const result = await response.json();
+        console.error("Delete failed:", result);
+        alert(result.message || "Gagal menghapus konten");
       }
     } catch (error) {
-      console.log(error);
-      alert("An error occurred while deleting data");
+      console.error("Error deleting content:", error);
+      alert("Terjadi kesalahan saat menghapus konten");
     }
   };
 
   return (
-    <div className="flex w-full h-48 text-white bg-[#016A70] p-3 shadow-2xl rounded-xl hover:scale-102 transition-transform duration-300">
-      <section className="flex-none w-1/4 h-auto">
+    <div className="flex w-full h-auto text-white p-2 bg-[#016A70] shadow-2xl rounded-xl hover:scale-102 transition-transform duration-300">
+      {/* Gambar Konten */}
+      <section className="flex-none w-1/4">
         <img
-          src={`http://localhost:8000/storage/${data.image}`}
-          alt="gambar"
-          className="object-cover w-full h-full rounded-lg"
+          src={`http://localhost:8000/storage/${data.image || "default.jpg"}`}
+          alt="Content"
+          className="object-cover w-full h-full"
+          onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} // Tambahkan fallback image jika gambar tidak ditemukan
         />
       </section>
       <section className="flex flex-col flex-grow ml-7 space-y-3">
-        <div>
+        <div className="p-2 flex-grow">
           <h2 className="text-xl font-bold">{data.title}</h2>
-          <p className="text-sm opacity-80 w-96">{data.description}</p>
+          <p className="text-sm opacity-80 w-96 overflow-hidden text-ellipsis" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+            {data.description}
+          </p>
         </div>
-        <div className="bg-[#088C93] text-sm opacity-80 p-1 rounded-lg mr-7 mt-10">
+
+        {/* Informasi Postingan */}
+        <div className="bg-[#088C93] text-sm opacity-80 p-2 rounded-lg mr-7">
           <p className="text-[#14FF8D]">
-            Posted by: <span className="">{data.user?.username || "Unknown"}</span>
+            Diposting oleh:{" "}
+            <span>{data.user?.username || "Tidak diketahui"}</span>
           </p>
           <p>{formatDate(data.created_at)}</p>
         </div>
       </section>
-      <section className="flex flex-col justify-center ml-auto space-y-2">
+
+      {/* Tombol Aksi */}
+      <section className="flex flex-col justify-center ml-auto space-y-2 p-5">
         <button
-          className="relative flex justify-between items-center px-4 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
+          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
           onClick={() => navigate(`/update_gallery/${data.id}`)}
         >
           <span>Update</span>
           <FaPen className="absolute right-3" />
         </button>
         <button
-          className="relative flex justify-between items-center px-4 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
+          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
           onClick={handleDelete}
         >
-          <span>Delete</span>
+          <span>Hapus</span>
           <FaTrash className="absolute right-3" />
         </button>
         <button
-          className="relative flex justify-between items-center mr-12 px-4 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
+          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
           onClick={() => navigate(`/detail_gallery/${data.id}`)}
         >
           <span>Detail</span>
@@ -86,3 +100,5 @@ export const GalleryCard = ({ data, onDelete }) => {
     </div>
   );
 };
+
+export default GalleryCard;

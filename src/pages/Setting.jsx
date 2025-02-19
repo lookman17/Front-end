@@ -134,7 +134,7 @@ const Settings = () => {
                   id="username"
                   type="text"
                   name="username"
-                  className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="mt-1 p-2 block w-full ring-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={formData.username}
                   onChange={handleInputChange}
                   required
@@ -149,7 +149,7 @@ const Settings = () => {
                 id="email"
                 type="email"
                 name="email"
-                className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="mt-1 p-2 block ring-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 value={formData.email}
                 onChange={handleInputChange}
                 required
@@ -163,7 +163,7 @@ const Settings = () => {
                 id="password"
                 type="password"
                 name="password"
-                className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="mt-1 p-2 block w-full rounded-md ring-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 value={formData.password}
                 onChange={handleInputChange}
                 required

@@ -10,6 +10,7 @@ import  Settings  from "./pages/Setting.jsx";
 import { Login } from "./pages/Login.jsx";
 import Event from "./pages/Event.jsx";
 import Gallery from "./pages/Gallery.jsx";
+import CreateEvent from "./pages/Admin/Create_Event.jsx";
 import ContentList from "./pages/Admin/Gallery.jsx";
 import UpdateGallery from "./pages/Admin/Update_Gallery";
 import CreateGallery from "./pages/Admin/Create_Gallery.jsx";
@@ -84,6 +85,14 @@ createRoot(document.getElementById("root")).render(
           element={
             <Layout>
               <Settings />
+            </Layout>
+          }
+        />
+        <Route
+          path="/Create/Event"
+          element={
+            <Layout>
+              <CreateEvent />
             </Layout>
           }
         />

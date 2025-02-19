@@ -63,7 +63,7 @@ const CreateGallery = () => {
       });
 
       alert("Gallery successfully added!");
-      navigate("/gallery/admin"); // Redirect setelah sukses menambah galeri
+      navigate("/gallery/admin");
 
     } catch (error) {
       if (error instanceof AxiosError) {

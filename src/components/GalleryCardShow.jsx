@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 export const GalleryCardShow = ({ data }) => {
@@ -16,6 +17,7 @@ export const GalleryCardShow = ({ data }) => {
             src={`http://localhost:8000/storage/${data.image}`}
             alt="gambar"
             className="object-cover w-full h-full rounded-l-lg"
+            onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} // Fallback image if the original is not found
           />
         </section>
         <section className="flex flex-col justify-between p-6 w-1/2">

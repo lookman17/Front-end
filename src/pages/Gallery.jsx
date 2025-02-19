@@ -10,21 +10,20 @@ const ContentList = () => {
   const fetchData = async () => {
     try {
       const res = await client.get("/api/content");
-      setContents(JSON.parse(res.data));
+      console.log("Full API Response:", res.data);
+      const data = Array.isArray(res.data) ? res.data : [];
+      console.log("Parsed Contents:", data);
+      setContents(data);
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error.message);
+        console.error("Error fetching data:", error.message);
       }
     }
   };
 
   useEffect(() => {
     fetchData();
-
-    // Polling every 10 seconds
     const interval = setInterval(fetchData, 10000);
-
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
 

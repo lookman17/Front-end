@@ -25,7 +25,7 @@ export const Login = () => {
 
       console.log("Login Data:", data);
       const res = await client.post("/api/login", JSON.stringify(data));
-      const responseData = JSON.parse(res.data);
+      const responseData = res.data;
 
       console.log("Response Data:", responseData);
       if (typeof responseData === "object" && responseData !== null) {
@@ -34,7 +34,9 @@ export const Login = () => {
         if (responseData.token) {
           alert("Login success");
 
+          console.log("Storing sanctum_token:", responseData.token);
           window.localStorage.setItem("sanctum_token", responseData.token);
+
           const checkRes = await client.get("/api/check", {
             headers: {
               Authorization: `Bearer ${responseData.token}`,
@@ -42,22 +44,13 @@ export const Login = () => {
           });
 
           const checkResponseData = checkRes.data;
-
           console.log("Full Check Response Data:", checkResponseData);
-
-          // Tambahkan log untuk memastikan data user benar
-          console.log("Check Response Data User:", checkResponseData.user);
-          console.log("Check Response Data User ID:", checkResponseData.user?.id);
 
           if (checkResponseData.user && checkResponseData.user.id) {
             const userId = checkResponseData.user.id;
-            console.log("User ID to be stored:", userId);
-
-            // Menyimpan user_id di local storage
+            console.log("Storing user_id:", userId);
             window.localStorage.setItem("user_id", userId);
-            console.log("User ID stored in local storage:", userId);
 
-            // Periksa apakah user_id tersimpan di local storage
             const storedUserId = window.localStorage.getItem("user_id");
             console.log("Retrieved User ID from local storage:", storedUserId);
 
@@ -67,6 +60,7 @@ export const Login = () => {
               alert("Failed to store User ID in local storage");
             }
 
+            console.log("Storing user object:", JSON.stringify(checkResponseData.user));
             window.localStorage.setItem("user", JSON.stringify(checkResponseData.user));
           } else {
             console.log("User ID not found in checkResponseData.user");
@@ -83,10 +77,7 @@ export const Login = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(
-          "Axios Error:",
-          error.response?.data?.message || "Login failed"
-        );
+        console.log("Axios Error:", error.response?.data?.message || "Login failed");
         alert(error.response?.data?.message || "Login failed");
       } else {
         console.log("Unexpected Error:", error);
