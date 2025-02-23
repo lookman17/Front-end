@@ -17,7 +17,7 @@ export const GalleryCardShow = ({ data }) => {
             src={`http://localhost:8000/storage/${data.image}`}
             alt="gambar"
             className="object-cover w-full h-full rounded-l-lg"
-            onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} // Fallback image if the original is not found
+            onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }}
           />
         </section>
         <section className="flex flex-col justify-between p-6 w-1/2">
@@ -25,7 +25,9 @@ export const GalleryCardShow = ({ data }) => {
             <h2 className="text-2xl font-bold leading-tight" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {data.title}
             </h2>
-            <p className="text-sm opacity-80">{data.description}</p>
+            <p className="text-sm opacity-80" style={{ display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+              {data.description}
+            </p>
           </div>
           <div className="flex flex-col space-y-1 bg-[#088C93] p-3 rounded-2xl text-sm opacity-80 mt-6">
             <p>

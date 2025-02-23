@@ -9,6 +9,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handlePasswordToggle = () => {
@@ -17,78 +18,63 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const data = {
         username: e.target.elements.username.value,
         password: e.target.elements.password.value,
       };
 
-      console.log("Login Data:", data);
       const res = await client.post("/api/login", JSON.stringify(data));
       const responseData = res.data;
 
-      console.log("Response Data:", responseData);
-      if (typeof responseData === "object" && responseData !== null) {
-        console.log("Valid responseData:", responseData);
+      if (responseData.token) {
+        window.localStorage.setItem("sanctum_token", responseData.token);
 
-        if (responseData.token) {
-          alert("Login success");
+        const checkRes = await client.get("/api/check", {
+          headers: { Authorization: `Bearer ${responseData.token}` },
+        });
 
-          console.log("Storing sanctum_token:", responseData.token);
-          window.localStorage.setItem("sanctum_token", responseData.token);
+        const checkResponseData = checkRes.data;
+        if (checkResponseData.user?.id) {
+          window.localStorage.setItem("user_id", checkResponseData.user.id);
+          window.localStorage.setItem(
+            "user",
+            JSON.stringify(checkResponseData.user)
+          );
 
-          const checkRes = await client.get("/api/check", {
-            headers: {
-              Authorization: `Bearer ${responseData.token}`,
-            },
-          });
-
-          const checkResponseData = checkRes.data;
-          console.log("Full Check Response Data:", checkResponseData);
-
-          if (checkResponseData.user && checkResponseData.user.id) {
-            const userId = checkResponseData.user.id;
-            console.log("Storing user_id:", userId);
-            window.localStorage.setItem("user_id", userId);
-
-            const storedUserId = window.localStorage.getItem("user_id");
-            console.log("Retrieved User ID from local storage:", storedUserId);
-
-            if (storedUserId === String(userId)) {
-              alert("User ID successfully stored in local storage: " + storedUserId);
-            } else {
-              alert("Failed to store User ID in local storage");
-            }
-
-            console.log("Storing user object:", JSON.stringify(checkResponseData.user));
-            window.localStorage.setItem("user", JSON.stringify(checkResponseData.user));
-          } else {
-            console.log("User ID not found in checkResponseData.user");
-          }
-
-          // Arahkan ke dashboard
-          navigate("/Dashboard");
-        } else {
-          alert(responseData.message || "Login failed");
+          // Efek loading sebelum berpindah ke dashboard
+          setTimeout(() => {
+            setIsLoading(false);
+            navigate("/Dashboard");
+          }, 2000); 
         }
       } else {
-        console.log("Invalid responseData format:", responseData);
-        alert("Login failed: Invalid response data format");
+        alert(responseData.message || "Login failed");
+        setIsLoading(false);
       }
     } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log("Axios Error:", error.response?.data?.message || "Login failed");
-        alert(error.response?.data?.message || "Login failed");
-      } else {
-        console.log("Unexpected Error:", error);
-        alert("An unexpected error occurred");
-      }
+      alert(error.response?.data?.message || "Login failed");
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex p-8 justify-center shadow-2xl items-center min-h-screen text-[#088C93] bg-[#016A70]">
-      <div className="flex rounded-xl">
+    <div className="flex p-8 justify-center shadow-2xl items-center min-h-screen text-[#088C93] bg-[#016A70] relative">
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[#016A70] z-50 opacity-90 transition-opacity duration-500">
+          <img src={logo} alt="Loading" className="w-40 h-40 animate-pulse" />
+        </div>
+      )}
+
+      <div
+        className={`flex rounded-xl ${
+          isLoading
+            ? "opacity-0"
+            : "opacity-100 transition-opacity duration-500"
+        }`}
+      >
         <div className="flex space-y-8 py flex-1 p-10 w-[600px] rounded-l-2xl bg-[#088C93]">
           <form
             className="flex flex-col text-black space-y-4"
@@ -133,8 +119,33 @@ export const Login = () => {
                   >
                     r
                   </span>
+                  <span
+                    className="label-char text-white"
+                    style={{ "--index": 4 }}
+                  >
+                    n
+                  </span>
+                  <span
+                    className="label-char text-white"
+                    style={{ "--index": 5 }}
+                  >
+                    a
+                  </span>
+                  <span
+                    className="label-char text-white"
+                    style={{ "--index": 6 }}
+                  >
+                    m
+                  </span>
+                  <span
+                    className="label-char text-white"
+                    style={{ "--index": 7 }}
+                  >
+                    e
+                  </span>
                 </label>
               </div>
+
               <div className="wave-group-login w-full space-y-2 h-28 relative">
                 <input
                   required

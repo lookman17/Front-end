@@ -38,7 +38,7 @@ const CreateEvent = () => {
       try {
         const response = await client.get("/api/category");
         console.log("API Response:", response.data); // Debug response API
-  
+
         // Pastikan kita mengambil `data` yang berisi array kategori
         setCategories(response.data.data || []);
         console.log("Categories state:", response.data.data); // Debug state kategori
@@ -47,21 +47,27 @@ const CreateEvent = () => {
         setError(error);
       }
     };
-  
+
     fetchCategories();
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
+    if (formData.endTime <= formData.startTime) {
+      alert("Jam selesai harus lebih besar dari jam mulai.");
+      setIsLoading(false);
+      return;
+    }
+  
     try {
       const storedUserId = localStorage.getItem("user_id");
       if (!storedUserId) {
         alert("User ID not found.");
+        setIsLoading(false);
         return;
       }
-
-      // Create FormData to send to the server
+  
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
       formDataToSend.append("description", formData.description);
@@ -70,30 +76,30 @@ const CreateEvent = () => {
       formDataToSend.append("end_time", formData.endTime);
       formDataToSend.append("location", formData.location);
       formDataToSend.append("status", formData.status);
-      formDataToSend.append("category", formData.category);
+      formDataToSend.append("category_id", formData.category);
       formDataToSend.append("user_id", storedUserId);
       formDataToSend.append("host", formData.host);
       formDataToSend.append("image", formData.image);
-
+  
       const res = await client.post("/api/events", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
+  
       alert("Event created successfully!");
-      navigate("/events/admin"); // Redirect after successfully adding an event
+      navigate("/event/admin");
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log("Error message:", error.message);
-        console.log("Server response:", error.response?.data); // View error from backend
+        console.log("Server response:", error.response?.data);
         setError(error);
       }
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files.length > 0) {
@@ -110,14 +116,27 @@ const CreateEvent = () => {
   };
 
   if (error) {
-    return <div className="text-red-500">Error: {error.response?.data?.message || error.message}</div>;
+    return (
+      <div className="text-red-500">
+        Error: {error.response?.data?.message || error.message}
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col space-y-2 m-12 pb-12">
-      <h1 className="font-bold text-2xl">Tambah Event</h1>
+      <h1 className="font-semibold text-2xl">Tambah Acara</h1>
       <p>
-        <span className="text-green-600">{formattedDate}</span>
+        <span className="text-green-600">
+          {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
+        </span>{" "}
+        / {String(new Date().getDate()).padStart(2, "0")} /{" "}
+        <span>
+          {new Date()
+            .toLocaleDateString("id-ID", { month: "long" })
+            .toLowerCase()}
+        </span>{" "}
+        / {new Date().getFullYear()}
       </p>
 
       <section className="flex flex-col space-y-8 pt-4">
@@ -128,7 +147,7 @@ const CreateEvent = () => {
       </section>
 
       <section className="relative flex pt-4">
-        <div className="absolute h-[600px] p-20 rounded-2xl text-white bg-[#016A70] z-10"></div>
+        <div className="absolute h-[900px] p-20 rounded-2xl text-white bg-[#016A70] z-10"></div>
         <div className="relative w-full ml-[10%] h-full p-28 rounded-4xl bg-white z-20 drop-shadow-2xl">
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
@@ -256,32 +275,34 @@ const CreateEvent = () => {
               </div>
             </div>
             <div>
-  <label
-    htmlFor="category"
-    className="block text-sm font-medium text-gray-700"
-  >
-    Kategori
-  </label>
-  <select
-  id="category"
-  name="category"
-  className="mt-1 p-2 block w-full border-gray-300 shadow-sm"
-  value={formData.category}
-  onChange={handleInputChange}
-  required
->
-  <option value="" disabled>Pilih kategori...</option>
-  {categories.length > 0 ? (
-    categories.map((category) => (
-      <option key={category.id} value={category.id}>
-        {category.name}
-      </option>
-    ))
-  ) : (
-    <option disabled>Loading categories...</option>
-  )}
-</select>
-</div>
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Kategori
+              </label>
+              <select
+                id="category"
+                name="category"
+                className="mt-1 p-2 block w-full border-gray-300 shadow-sm"
+                value={formData.category}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="" disabled>
+                  Pilih kategori...
+                </option>
+                {categories.length > 0 ? (
+                  categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>Loading categories...</option>
+                )}
+              </select>
+            </div>
             <div>
               <label
                 htmlFor="host"
@@ -320,7 +341,7 @@ const CreateEvent = () => {
               className="mt-4 inline-flex items-center justify-center px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#088C93] w-full text-center hover:bg-[#065e65] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               disabled={isLoading}
             >
-              {isLoading ? 'Loading...' : 'Simpan'}
+              {isLoading ? "Loading..." : "Simpan"}
             </button>
           </form>
         </div>

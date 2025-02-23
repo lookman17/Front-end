@@ -1,4 +1,4 @@
-import { Sidebar } from "./Sidebar";
+import { Sidebar } from "../components_admin/Sidebar";
 
 export const Layout = ({ children }) => {
   try {

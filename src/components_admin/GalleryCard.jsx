@@ -45,20 +45,19 @@ const GalleryCard = ({ data, onDelete }) => {
   };
 
   return (
-    <div className="flex w-full h-auto text-white p-2 bg-[#016A70] shadow-2xl rounded-xl hover:scale-102 transition-transform duration-300">
-      {/* Gambar Konten */}
+    <div className="flex w-full h-44 text-white p-2 bg-[#016A70] shadow-2xl rounded-xl hover:scale-102 transition-transform duration-300">
       <section className="flex-none w-1/4">
         <img
           src={`http://localhost:8000/storage/${data.image || "default.jpg"}`}
           alt="Content"
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full rounded-lg"
           onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} // Tambahkan fallback image jika gambar tidak ditemukan
         />
       </section>
       <section className="flex flex-col flex-grow ml-7 space-y-3">
         <div className="p-2 flex-grow">
           <h2 className="text-xl font-bold">{data.title}</h2>
-          <p className="text-sm opacity-80 w-96 overflow-hidden text-ellipsis" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+          <p className="text-sm opacity-80 w-96 overflow-hidden text-ellipsis" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
             {data.description}
           </p>
         </div>

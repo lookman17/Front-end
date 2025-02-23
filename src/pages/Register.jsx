@@ -2,12 +2,13 @@ import { useState } from "react";
 import { AxiosError } from "axios";
 import { client } from "../components/axios";
 import logo from "../assets/Logo-Tpq.png";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import "./Register.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handlePasswordToggle = () => {
     setPasswordVisible(!passwordVisible);
@@ -25,6 +26,7 @@ export const Register = () => {
       console.log(data);
       const res = await client.post("/api/register", JSON.stringify(data));
       alert("Registration successful!");
+      navigate("/login");
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.message);

@@ -90,11 +90,19 @@ const CreateGallery = () => {
 
   return (
     <div className="flex flex-col space-y-2 m-12 pb-12">
-      <h1 className="font-bold text-2xl">Tambah Galeri</h1>
+<h1 className="font-semibold text-2xl">Tambah Album</h1>
       <p>
-        <span className="text-green-600">{formattedDate}</span>
+        <span className="text-green-600">
+          {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
+        </span>{" "}
+        / {String(new Date().getDate()).padStart(2, "0")} /{" "}
+        <span>
+          {new Date()
+            .toLocaleDateString("id-ID", { month: "long" })
+            .toLowerCase()}
+        </span>{" "}
+        / {new Date().getFullYear()}
       </p>
-
       <section className="flex flex-col space-y-8 pt-4">
         <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
           <h2 className="font-bold text-4xl">Tambah Galeri</h2>
@@ -103,9 +111,9 @@ const CreateGallery = () => {
       </section>
 
       <section className="relative flex pt-4">
-        <div className="absolute h-[600px] p-20 rounded-2xl text-white bg-[#016A70] z-10"></div>
+        <div className="absolute h-[640px] p-20 rounded-2xl text-white bg-[#016A70] z-10"></div>
         <div className="relative w-full ml-[10%] h-full p-28 rounded-4xl bg-white z-20 drop-shadow-2xl">
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-14" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                 Judul

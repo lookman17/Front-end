@@ -36,7 +36,7 @@ const Events = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col space-y-2 m-12 pb-12">
-        <h1 className="font-bold text-2xl">Dashboard</h1>
+        <h1 className="font-semibold text-2xl">Acara</h1>
         <p>
           <span className="text-green-600">
             {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
@@ -66,7 +66,13 @@ const Events = () => {
           </div>
           <div className="space-y-3">
             {isLoading ? (
-              <div>Loading...</div>
+              <section className="dots-container">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </section>
             ) : events.length > 0 ? (
               events.map((event) => (
                 <EventCard key={event.id} data={event} onDelete={handleDelete} />

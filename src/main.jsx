@@ -15,7 +15,7 @@ import ContentList from "./pages/Admin/Gallery.jsx";
 import UpdateGallery from "./pages/Admin/Update_Gallery";
 import CreateGallery from "./pages/Admin/Create_Gallery.jsx";
 import Dashboard from "./pages/Beranda.jsx";
-import GalleryDetail from "./pages/Admin/Detail_Gallery.jsx";
+import GalleryDetail from "./pages/Detail_Gallery.jsx";
 //import PrivateRoute from "./components/PrivateRoute.jsx";
 
 createRoot(document.getElementById("root")).render(

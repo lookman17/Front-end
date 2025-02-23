@@ -36,7 +36,17 @@ const Gallery = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col space-y-2 m-12 pb-12">
-        <h1 className="font-bold text-2xl">Gallery</h1>
+        <h1 className="font-semibold text-2xl">Album</h1>
+        <p>
+          <span className="text-green-600">
+            {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
+          </span>{" "}
+          / {String(new Date().getDate()).padStart(2, "0")} /{" "}
+          <span>
+            {new Date().toLocaleDateString("id-ID", { month: "long" }).toLowerCase()}
+          </span>{" "}
+          / {new Date().getFullYear()}
+        </p>
         <section className="flex flex-col space-y-8 pt-4">
           <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
             <h2 className="font-bold text-4xl">Hi, Ferdy</h2>
@@ -54,8 +64,15 @@ const Gallery = () => {
             </div>
           </div>
           <div className="space-y-3">
+            
             {isLoading ? (
-              <div>Loading...</div>
+              <section className="dots-container">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </section>
             ) : contents.length > 0 ? (
               contents.map((content) => (
                 <GalleryCard key={content.id} data={content} onDelete={handleDelete} />
