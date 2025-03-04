@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import  { Suspense, useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { client } from "../components/axios";
 import { Search } from "lucide-react";
@@ -39,15 +39,15 @@ const ContentList = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col space-y-2 m-12 pb-12">
-        <h1 className="font-bold text-2xl">Album</h1>
+        <h1 className="font-semibold text-2xl"> Album</h1>
         <p>
           <span className="text-green-600">
-            {new Date().toLocaleDateString("en-US", { weekday: "long" })}
+            {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
           </span>{" "}
           / {String(new Date().getDate()).padStart(2, "0")} /{" "}
           <span>
             {new Date()
-              .toLocaleDateString("en-US", { month: "long" })
+              .toLocaleDateString("id-ID", { month: "long" })
               .toLowerCase()}
           </span>{" "}
           / {new Date().getFullYear()}
@@ -69,7 +69,6 @@ const ContentList = () => {
             />
           </div>
 
-          {/* Grid 2 kolom untuk tampilan kanan-kiri */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {isLoading ? (
               <section className="dots-container">

@@ -11,12 +11,12 @@ export const GalleryCardShow = ({ data }) => {
     }).replace(/\//g, ' / ');
 
     return (
-      <Link to={`/detail_gallery/${data.id}`} className="flex w-full h-[360px] text-white bg-[#016A70] shadow-lg rounded-xl hover:scale-102 transition-transform duration-300">
+      <Link to={`/detail/gallery/${data.id}`} className="flex w-full h-[360px] text-white bg-[#016A70] shadow-lg rounded-xl hover:scale-102 transition-transform duration-300">
         <section className="flex-none w-1/2 h-full">
           <img
             src={`http://localhost:8000/storage/${data.image}`}
             alt="gambar"
-            className="object-cover w-full h-full rounded-l-lg"
+            className="object-cover w-full h-full rounded-l-lg "
             onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }}
           />
         </section>

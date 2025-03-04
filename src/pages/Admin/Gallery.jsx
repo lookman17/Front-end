@@ -49,8 +49,8 @@ const Gallery = () => {
         </p>
         <section className="flex flex-col space-y-8 pt-4">
           <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
-            <h2 className="font-bold text-4xl">Hi, Ferdy</h2>
-            <p>Ready to explore the gallery?</p>
+            <h2 className="font-bold text-4xl">Hi, Admin</h2>
+            <p>Siapkah menambah album hari ini?</p>
           </div>
           <div className="flex flex-col space-y-2">
             <p>Contents</p>
@@ -78,7 +78,7 @@ const Gallery = () => {
                 <GalleryCard key={content.id} data={content} onDelete={handleDelete} />
               ))
             ) : (
-              <div className="text-gray-500">No contents available.</div>
+              <div className="text-gray-500">Tidak ada album</div>
             )}
           </div>
         </section>

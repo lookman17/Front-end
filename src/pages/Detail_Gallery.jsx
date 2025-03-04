@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaPaperPlane, FaTrash } from "react-icons/fa";
+import { FaPaperPlane, } from "react-icons/fa";
 import axios from "axios";
 import { FaEllipsisV } from "react-icons/fa"; // Tambahkan ikon titik tiga
 
@@ -8,6 +8,7 @@ const GalleryDetail = () => {
   const { id } = useParams();
 
   const [showDeleteOption, setShowDeleteOption] = useState(null); // State untuk kontrol menu hapus
+  const [notification, setNotification] = useState(null);
 
   const toggleDeleteOption = (commentId) => {
     setShowDeleteOption(showDeleteOption === commentId ? null : commentId);
@@ -60,6 +61,13 @@ const GalleryDetail = () => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+
+    if (!userId) {
+      setNotification("Anda harus login terlebih dahulu untuk berkomentar.");
+      setTimeout(() => setNotification(null), 3000);
+      return;
+    }
+
     try {
       await axios.post("http://localhost:8000/api/comments", {
         gallery_id: id,
@@ -115,6 +123,7 @@ const GalleryDetail = () => {
             className="w-full h-96 object-cover rounded-lg"
           />
           <h1 className="text-3xl font-bold mt-4">{galleryData.title}</h1>
+
           <p className="text-gray-700 mt-2">{galleryData.description}</p>
         </div>
 
@@ -134,7 +143,7 @@ const GalleryDetail = () => {
                       : "http://localhost:8000/storage/profile_photos/default.jpg"
                   }
                   alt="Avatar"
-                  className="w-9 h-9  rounded-full border"
+                  className="w-9 h-9  rounded-full object-cover border"
                 />
                 {index < comments.length - 1 && (
                   <hr className="mt-4 border-t border-gray-300" />
@@ -151,7 +160,6 @@ const GalleryDetail = () => {
                   </small>
                 </div>
 
-                {/* TOMBOL TITIK TIGA */}
                 {comment.user_id.toString() === userId && (
                   <button
                     onClick={() => toggleDeleteOption(comment.id)}
@@ -161,7 +169,6 @@ const GalleryDetail = () => {
                   </button>
                 )}
 
-                {/* MENU HAPUS KOMENTAR */}
                 {showDeleteOption === comment.id &&
                   comment.user_id.toString() === userId && (
                     <div className="absolute right-5 bg-white border shadow-md p-1 rounded">
@@ -205,6 +212,16 @@ const GalleryDetail = () => {
               </button>
             </div>
           </form>
+          {notification && (
+            <div className="fixed top-5 right-5 bg-red-600 text-white p-3 rounded-lg shadow-lg">
+              {notification}
+              <button
+                onClick={() => setNotification(null)}
+                className="ml-2 text-1xl font-bold"
+              >
+              </button>
+            </div>
+          )}
         </div>
 
         {/* MODAL UNTUK MENAMPILKAN SEMUA KOMENTAR */}
@@ -224,40 +241,58 @@ const GalleryDetail = () => {
 
               {/* Daftar Komentar */}
               <div className="max-h-80 overflow-y-auto mt-4 space-y-3 pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                {comments.map((comment, index) => (
-                  <div
-                    key={index}
-                    className="flex items-start gap-3 bg-gray-100 p-3 rounded-lg relative"
-                  >
-                    {/* Foto Profil */}
-                    <img
-                      src={
-                        comment.user?.profile_photo
-                          ? `http://localhost:8000/storage/${comment.user.profile_photo}`
-                          : "http://localhost:8000/storage/profile_photos/default.jpg"
-                      }
-                      alt="Avatar"
-                      className="w-9 h-9 rounded-full border"
-                    />
+              {comments.slice(0, 6).map((comment, index) => (
+              <div
+                key={index}
+                className="p-2 rounded-4xl relative ring-1 flex items-center bg-[#088c9392] gap-2"
+              >
+                {/* Foto Profil */}
+                <img
+                  src={
+                    comment.user?.profile_photo
+                      ? `http://localhost:8000/storage/${comment.user.profile_photo}`
+                      : "http://localhost:8000/storage/profile_photos/default.jpg"
+                  }
+                  alt="Avatar"
+                  className="w-9 h-9  rounded-full object-cover border"
+                />
+                {index < comments.length - 1 && (
+                  <hr className="mt-4 border-t border-gray-300" />
+                )}
 
-                    {/* Nama & Komentar */}
-                    <div className="flex-1">
-                      <strong className="block">
-                        {comment.user?.username || "Anonim"}
-                      </strong>
-                      <p className="text-gray-700">{comment.content}</p>
-                    </div>
-                    {/* Tombol Hapus */}
-                    {comment.user_id.toString() === userId && (
+                {/* Nama dan isi komentar */}
+                <div className="">
+                  <strong className="font-semibold">
+                    {comment.user?.username || "Anonim"}
+                  </strong>
+                  <p>{comment.content}</p>
+                  <small className="text-gray-300">
+                    {new Date(comment.created_at).toLocaleString("id-ID")}
+                  </small>
+                </div>
+
+                {comment.user_id.toString() === userId && (
+                  <button
+                    onClick={() => toggleDeleteOption(comment.id)}
+                    className="absolute right-2 text-white hover:text-gray-300"
+                  >
+                    <FaEllipsisV />
+                  </button>
+                )}
+
+                {showDeleteOption === comment.id &&
+                  comment.user_id.toString() === userId && (
+                    <div className="absolute right-5 bg-white border shadow-md p-1 rounded">
                       <button
                         onClick={() => handleDeleteComment(comment.id)}
-                        className="text-red-600 hover:text-red-800 transition"
+                        className="text-red-600 hover:text-red-800 px-2 py-1"
                       >
-                        <FaTrash />
+                        Hapus Komentar
                       </button>
-                    )}
-                  </div>
-                ))}
+                    </div>
+                  )}
+              </div>
+            ))}
               </div>
 
               {/* Tombol Tutup */}

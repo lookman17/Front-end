@@ -15,7 +15,6 @@ const UpdateGallery = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🔥 Fetch data saat komponen dimount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,15 +23,20 @@ const UpdateGallery = () => {
         );
         const result = await response.json();
 
-        console.log("Fetched data from API:", result); // Debugging
+        console.log("Fetched data from API:", result);
+        console.log("Fetched data:", result); 
+        console.log(
+          "Image URL:",
+          `http://localhost:8000/storage/${result.image}`
+        );
 
         if (response.ok) {
           setGalleryData({
             title: result.title,
             description: result.description,
-            image: null, // Kosongkan agar tidak error di form
+            image: null,
           });
-          setPreviewImage(`http://localhost:8000/storage/${result.image}`);
+          setPreviewImage(result.image);
         } else {
           setError(result.message || "Failed to fetch data");
         }
@@ -47,13 +51,11 @@ const UpdateGallery = () => {
     fetchData();
   }, [id]);
 
-  // 🔥 Handle perubahan input
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files.length > 0) {
       setGalleryData((prevData) => ({ ...prevData, [name]: files[0] }));
 
-      // Preview gambar sebelum submit
       const imageUrl = URL.createObjectURL(files[0]);
       setPreviewImage(imageUrl);
     } else {
@@ -61,7 +63,6 @@ const UpdateGallery = () => {
     }
   };
 
-  // 🔥 Submit form untuk update data
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -117,12 +118,15 @@ const UpdateGallery = () => {
 
       {/* Form */}
       <section className="relative flex pt-4">
-        <div className="absolute h-[600px] p-20 rounded-2xl text-white bg-[#016A70] z-10"></div>
+        <div className="absolute h-[960px] p-20 rounded-2xl text-white bg-[#016A70] z-10"></div>
         <div className="relative w-full ml-[10%] h-full p-28 rounded-4xl bg-white z-20 drop-shadow-2xl">
           <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Judul */}
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Judul
               </label>
               <input
@@ -138,7 +142,10 @@ const UpdateGallery = () => {
 
             {/* Deskripsi */}
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Deskripsi
               </label>
               <textarea
@@ -152,7 +159,10 @@ const UpdateGallery = () => {
 
             {/* Gambar */}
             <div>
-              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="image"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Gambar
               </label>
               <input
@@ -165,7 +175,11 @@ const UpdateGallery = () => {
               {previewImage && (
                 <div className="mt-2">
                   <p>Preview Image:</p>
-                  <img src={previewImage} alt="Preview" className="w-40 h-auto mt-2 rounded-md" />
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="w-96 object-cover h-96 mt-2 rounded-md"
+                  />
                 </div>
               )}
             </div>

@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AxiosError } from "axios";
-import { client } from "../components/axios";
+import { client, multiPartClient } from "../components/axios";
 import { FaSignOutAlt } from "react-icons/fa";
-
 
 const Settings = () => {
   const [user, setUser] = useState(null);
@@ -11,7 +10,10 @@ const Settings = () => {
     username: "",
     email: "",
     password: "",
+    profile_photo: null,
   });
+
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +47,7 @@ const Settings = () => {
           username: userData.username || "",
           email: userData.email || "",
           password: "",
+          profile_photo: null,
         });
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -59,12 +62,57 @@ const Settings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await client.put("/update-user", JSON.stringify(formData));
+      const token = localStorage.getItem("sanctum_token");
+  
+      const formDataToSend = new FormData();
+      formDataToSend.append("_method", "PATCH");
+  
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== "" && formData[key] !== null) {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
+  
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      };
+  
+      const response = await multiPartClient.post(
+        "/api/update-user",
+        formDataToSend,
+        { headers }
+      );
+  
       alert("Pengaturan berhasil diperbarui!");
+  
+      // Perbarui state user dengan data terbaru dari respons API
+      setUser((prevUser) => ({
+        ...prevUser,
+        name: response.data.name || prevUser.name,
+        username: response.data.username || prevUser.username,
+        email: response.data.email || prevUser.email,
+        profile_photo_url: formData.profile_photo
+          ? URL.createObjectURL(formData.profile_photo)
+          : response.data.profile_photo_url || prevUser.profile_photo_url,
+      }));
+  
+      // Reset hanya password agar tidak terkirim ulang
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        password: "",
+      }));
+  
+      // Auto refresh halaman setelah update berhasil
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
-      console.error("Error:", error.response?.data);
+      console.error("Error:", error);
+      alert(`Error: ${error.response?.data?.message || "Terjadi kesalahan."}`);
     }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem("sanctum_token");
@@ -78,43 +126,70 @@ const Settings = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleProfilePhotoClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleProfilePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prevData) => ({ ...prevData, profile_photo: file }));
+      setUser((prevUser) => ({
+        ...prevUser,
+        profile_photo_url: URL.createObjectURL(file),
+      }));
+    }
+  };
+  
+
   return (
     <div className="flex flex-col space-y-4 m-12 pb-12">
       <h1 className="font-semibold text-2xl">Pengaturan Akun</h1>
-        <p>
-          <span className="text-green-600">
-            {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
-          </span>{" "}
-          / {String(new Date().getDate()).padStart(2, "0")} /{" "}
-          <span>
-            {new Date().toLocaleDateString("id-ID", { month: "long" }).toLowerCase()}
-          </span>{" "}
-          / {new Date().getFullYear()}
-        </p>
+      <p>
+        <span className="text-green-600">
+          {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
+        </span>{" "}
+        / {String(new Date().getDate()).padStart(2, "0")} /{" "}
+        <span>
+          {new Date()
+            .toLocaleDateString("id-ID", { month: "long" })
+            .toLowerCase()}
+        </span>{" "}
+        / {new Date().getFullYear()}
+      </p>
       <section className="flex pt-4 gap-x-8">
         <div className="w-1/3 p-4 h-[600px] bg-white shadow-md rounded-2xl text-center">
-          <div className="mb-4 flex flex-col items-center justify-center">
-            <img
-              src={
-                user
-                  ? user.profile_photo_url
-                  : "http://localhost:8000/storage/profile_photos/default.jpg"
-              }
-              alt="User"
-              className="object-cover w-54 h-54 rounded-full ring-1"
+          <div className="mb-4 flex flex-col items-center justify-center relative group">
+            <label htmlFor="photo-upload" className="cursor-pointer">
+              <img
+                src={
+                  user
+                    ? user.profile_photo_url
+                    : "http://localhost:8000/storage/profile_photos/default.jpg"
+                }
+                alt="User"
+                className="object-cover w-54 h-54 rounded-full ring-1 group-hover:opacity-70"
+                onClick={handleProfilePhotoClick}
+              />
+            </label>
+            <input
+              type="file"
+              id="photo-upload"
+              className="hidden"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleProfilePhotoChange}
             />
             <p className="mt-2 font-medium text-center">
               {user ? user.username : "Guest"}
             </p>
           </div>
-
           <button
-  onClick={handleLogout}
-  className="mt-4 px-6 py-2 w-full rounded-lg shadow-lg flex items-center justify-center gap-2 hover:bg-gray-100 ease-in-out"
->
-  <FaSignOutAlt /> Log Out
-</button>
-
+            onClick={handleLogout}
+            className="mt-4 px-6 py-2 w-full rounded-lg shadow-lg flex items-center justify-center gap-2 hover:bg-gray-100 ease-in-out"
+          >
+            <FaSignOutAlt /> Log Out
+          </button>
         </div>
 
         <div className="w-2/3 p-10 bg-white rounded-2xl shadow-md">

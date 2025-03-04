@@ -1,11 +1,11 @@
-import santri1 from "../assets/santri-1.jpeg";
-import santri2 from "../assets/santri-2.jpeg";
-import santri3 from "../assets/santri-3.jpeg";
-import logo from "../assets/Logo-Tpq.png";
+import santri1 from "../../assets/santri-1.jpeg";
+import santri2 from "../../assets/santri-2.jpeg";
+import santri3 from "../../assets/santri-3.jpeg";
+import logo from "../../assets/Logo-Tpq.png";
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const Beranda = () => {
+const Dashboard = () => {
   const images = [santri1, santri2, santri3];
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -236,4 +236,4 @@ const Beranda = () => {
   );
 };
 
-export default Beranda;
+export default Dashboard;

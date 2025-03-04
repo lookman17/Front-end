@@ -6,6 +6,16 @@ export const client = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
     Authorization: `Bearer ${window.localStorage.getItem("sanctum_token")}`,
-    'user_id': window.localStorage.getItem("user_id"),
+    user_id: window.localStorage.getItem("user_id"),
+  },
+});
+
+export const multiPartClient = axios.create({
+  baseURL: import.meta.env.VITE_LARAVEL_URL,
+  headers: {
+    "Content-Type": "multipart/form-data",
+    Accept: "application/json",
+    Authorization: `Bearer ${window.localStorage.getItem("sanctum_token")}`,
+    user_id: window.localStorage.getItem("user_id"),
   },
 });
