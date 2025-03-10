@@ -22,7 +22,8 @@ import EventDetail from "./pages/Detail_Event.jsx";
 import EventShow from "./pages/EventShow.jsx";
 import CreateCategory from "./pages/Admin/Create_Category.jsx";
 import UpdateCategory from "./pages/Admin/Update_Category.jsx";
-//import PrivateRoute from "./components/PrivateRoute.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import { RegisterAdmin } from "./pages/RegisterAdmin.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -34,101 +35,125 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/Dashboard"
           element={
-            <Layout>
-              <Dashboard />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/gallery/admin"
           element={
-            <Layout>
-              <ContentList />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <ContentList />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/detail_gallery/:id"
           element={
-            <Layout>
-              <GalleryDetail />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <GalleryDetail />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/Create/Gallery"
           element={
-            <Layout>
-              <CreateGallery />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <CreateGallery />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/update_gallery/:id"
           element={
-            <Layout>
-              <UpdateGallery />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <UpdateGallery />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/update_event/:id"
           element={
-            <Layout>
-              <UpdateEvent />
-            </Layout>
-          }
-        />
-        <Route
-          path="/event/admin"
-          element={
-            <Layout>
-              <Event />
-            </Layout>
-          }
-        />
-        <Route
-          path="/setting/admin"
-          element={
-            <Layout>
-              <Settings />
-            </Layout>
-          }
-        />
-        <Route
-          path="/Create/Event"
-          element={
-            <Layout>
-              <CreateEvent />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <UpdateEvent />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/detail_event/:id"
           element={
-            <Layout>
-              <EventDetail />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <EventDetail />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/event/admin"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <Event />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/setting/admin"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <Settings />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Create/Event"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <CreateEvent />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/Create/Category"
           element={
-            <Layout>
-              <CreateCategory />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <CreateCategory />
+              </Layout>
+            </PrivateRoute>
           }
         />
         <Route
           path="/update_category/:id"
           element={
-            <Layout>
-              <UpdateCategory />
-            </Layout>
+            <PrivateRoute>
+              <Layout>
+                <UpdateCategory />
+              </Layout>
+            </PrivateRoute>
           }
         />
 
-        {/* Santri */}
+        {/* Rute untuk Santri */}
         <Route
           path="/profil"
           element={
@@ -185,6 +210,7 @@ createRoot(document.getElementById("root")).render(
             </LayoutSantri>
           }
         />
+        <Route path="/register/admin" element={<RegisterAdmin />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

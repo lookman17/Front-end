@@ -4,7 +4,6 @@ import { client } from "../../components/axios";
 import { useNavigate } from "react-router-dom";
 
 const CreateEvent = () => {
-  const [userId, setUserId] = useState(null); 
   const navigate = useNavigate(); 
   const [categories, setCategories] = useState([]); 
   const [error, setError] = useState(null); 

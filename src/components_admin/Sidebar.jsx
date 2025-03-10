@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Grid2X2, Image, Calendar, Settings } from "lucide-react";
 import Logo from "../components/Logo";
 
 export const Sidebar = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const location = useLocation(); // Ambil path saat ini
 
-  const handleLogout = () => {
+ {/* const handleLogout = () => {
     localStorage.removeItem("sanctum_token");
     setUser(null);
     navigate("/login");
-  };
+  };*/}
 
   useEffect(() => {
     setLoading(true);
@@ -52,7 +52,6 @@ export const Sidebar = () => {
 
   return (
     <aside className="sticky top-0 flex flex-col space-y-6 shadow-2xl w-[300px] py-12 h-screen bg-white">
-      {/* Logo Section */}
       <section className="flex justify-center">
         <div className="flex">
           <Logo />
@@ -65,7 +64,6 @@ export const Sidebar = () => {
         </div>
       </section>
 
-      {/* Welcome Section */}
       <section className="px-2">
         <div className="bg-[#016A70] text-white rounded-xl p-4">
           {loading ? (
@@ -78,7 +76,6 @@ export const Sidebar = () => {
         </div>
       </section>
 
-      {/* Navigation Links */}
       <section className="px-2 flex flex-col space-y-4">
         {[
           { to: "/Dashboard", icon: <Grid2X2 />, text: "Profil" },
@@ -102,7 +99,6 @@ export const Sidebar = () => {
         ))}
       </section>
 
-      {/* Profile & Logout Section */}
       <section className="flex space-x-2 items-center h-full text-white bg-[#016A70] p-10 rounded-t-4xl">
         <img
           src={

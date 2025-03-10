@@ -15,7 +15,6 @@ const GalleryCard = ({ data, onDelete }) => {
     });
   };
 
-  // Fungsi untuk menangani penghapusan konten
   const handleDelete = async () => {
     const isConfirmed = window.confirm(
       "Apakah Anda yakin ingin menghapus konten ini?"
@@ -51,7 +50,7 @@ const GalleryCard = ({ data, onDelete }) => {
           src={`http://localhost:8000/storage/${data.image || "default.jpg"}`}
           alt="Content"
           className="object-cover w-full h-full"
-          onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} // Tambahkan fallback image jika gambar tidak ditemukan
+          onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} 
         />
       </section>
       <section className="flex flex-col flex-grow ml-7 space-y-3">
@@ -72,13 +71,12 @@ const GalleryCard = ({ data, onDelete }) => {
         </div>
       </section>
 
-      {/* Tombol Aksi */}
       <section className="flex flex-col justify-center ml-auto space-y-2 p-5">
         <button
           className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
           onClick={() => navigate(`/update_gallery/${data.id}`)}
         >
-          <span>Update</span>
+          <span>Perbarui</span>
           <FaPen className="absolute right-3" />
         </button>
         <button

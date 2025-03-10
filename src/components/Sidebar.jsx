@@ -9,8 +9,6 @@ export const Sidebar = () => {
 
   const location = useLocation();
 
- 
-
   useEffect(() => {
     setLoading(true);
     const token = localStorage.getItem("sanctum_token");
@@ -59,7 +57,9 @@ export const Sidebar = () => {
         <div className="flex">
           <Logo />
           <div className="px-2 py-3">
-            <p className="text-green-600 font-bold text-[15px] leading-tight">Portal.Kegiatan</p>
+            <p className="text-green-600 font-bold text-[15px] leading-tight">
+              Portal.Kegiatan
+            </p>
             <p className="font-bold text-[11px] leading-2">TPQ.Darul.Ulum</p>
           </div>
         </div>
@@ -70,7 +70,9 @@ export const Sidebar = () => {
           {loading ? (
             <p className="font-semibold text-[20px]">Memuat...</p>
           ) : (
-            <p className="font-semibold text-[20px]">Selamat datang, {user ? user.name : "Admin"}</p>
+            <p className="font-semibold text-[20px]">
+              Selamat datang, {user ? user.name : "Admin"}
+            </p>
           )}
         </div>
       </section>
@@ -82,6 +84,10 @@ export const Sidebar = () => {
             to={item.path}
             className={`flex items-center space-x-4 text-black shadow-lg border border-gray-200 rounded-xl p-3 hover:bg-[#016A70] hover:text-white transition-all ${
               location.pathname === item.path ? "bg-[#016A70] text-white" : ""
+            } ${
+              item.label === "Pengaturan" && user?.name === "Guest"
+                ? "opacity-0 pointer-events-none"
+                : ""
             }`}
           >
             {item.icon}
@@ -90,7 +96,7 @@ export const Sidebar = () => {
         ))}
       </section>
 
-      <section className="flex space-x-2 items-center h-full text-white bg-[#016A70] p-10 rounded-t-4xl">
+      <section className="flex space-x-2 items-center mt-auto text-white bg-[#016A70] p-10 rounded-t-4xl">
         {user && user.name !== "Guest" ? (
           <>
             <img

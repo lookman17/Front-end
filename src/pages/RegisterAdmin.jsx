@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router";
 import "./Register.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-export const Register = () => {
+export const RegisterAdmin = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -21,33 +21,48 @@ export const Register = () => {
         name: e.target.elements.name.value,
         username: e.target.elements.username.value,
         password: e.target.elements.password.value,
+        role: "admin",
       };
 
       console.log(data);
-      const res = await client.post("/api/register", JSON.stringify(data));
-      alert("Registration successful!");
+      const res = await client.post("/api/register", JSON.stringify(data), {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      console.log('Server response:', res.data); // Log respons server
+      
+      
+      alert("Admin registration successful!");
       navigate("/login");
     } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log(error.message);
+      if (error.response) {
+        console.error('Response data:', error.response.data); // Menampilkan detail kesalahan dari server
+        console.error('Response status:', error.response.status); // Menampilkan status kesalahan
+        console.error('Response headers:', error.response.headers); // Menampilkan header respons
+        alert(`Error: ${error.response.data.message || error.response.statusText}`);
+      } else if (error.request) {
+        console.error('Request data:', error.request); // Data permintaan
+      } else {
+        console.error('Error message:', error.message); // Pesan kesalahan
       }
     }
+    
   };
 
   return (
-
     <div className="flex p-8 justify-center shadow-2xl items-center min-h-screen text-[#088C93] bg-[#016A70]">
       <div className="flex rounded-xl">
         <div className="flex-1 bg-[#088C93] rounded-l-2xl p-24 text-white">
         <h1 className="font-semibold text-4xl text-center">Hei There</h1>
 
-          <section className="mt-6 text-center">
-            <h5 className="text-lg">Don't have an account?</h5>
-            <h5 className="text-lg">Let's make an account!</h5>
-            <div className="mt-6">
+        <section className="mt-6 text-center">
+        <h5 className="text-lg">Come Register as an Admin</h5>
+        <h5 className="text-lg">Register as an Admin</h5>
+        <div className="mt-6">
               <img src={logo} alt="Logo" className="w-32 h-32 mx-auto" />
             </div>
-            <p className="mt-4 text-[#c7c7c7]">Have an account?</p>
+            <p className="mt-4 text-[#c7c7c7]">Already an admin?</p>
             <Link
               to="/login"
               className="mt-6 inline-flex w-48 h-10 border border-white rounded-lg items-center justify-center text-center hover:bg-white hover:text-[#088C93] transition duration-300"
@@ -63,7 +78,7 @@ export const Register = () => {
             onSubmit={(e) => handleSubmit(e)}
           >
             <div className="h-20 mb-10 text-3xl font-semibold text-[#088C93]">
-              <h1>Sign In</h1>
+              <h1>Sign Up</h1>
             </div>
             <div className="wave-group w-full space-y-2">
               <input

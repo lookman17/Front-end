@@ -117,8 +117,10 @@ const Settings = () => {
   const handleLogout = () => {
     localStorage.removeItem("sanctum_token");
     localStorage.removeItem("user_id");
+    localStorage.removeItem("user");
+    
     alert("Logout berhasil!");
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   const handleInputChange = (e) => {

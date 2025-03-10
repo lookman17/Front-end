@@ -21,7 +21,6 @@ const UpdateEvent = () => {
     host: "",
     image: null,
   });
-  const [previewImage, setPreviewImage] = useState("");
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -40,7 +39,6 @@ const UpdateEvent = () => {
           host: eventData.host || "",
           image: null,
         });
-        setPreviewImage(eventData.image);
       } catch (error) {
         console.error("Error fetching event data:", error);
         setError(error);

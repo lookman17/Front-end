@@ -62,9 +62,7 @@ const EventCard = ({ data, onDelete }) => {
           <p className="text-sm opacity-80 w-96 line-clamp-3">{data.description}</p>
         </div>
 
-        {/* Informasi Postingan & Status */}
         <div className="relative bg-[#088C93] text-sm opacity-80 p-3 rounded-lg mr-7 mb-3">
-          {/* Status diletakkan di atas informasi postingan */}
           <div className=" bg-green-500 text-white text-xs px-4 py-1 rounded-3xl shadow-md w-max">
             Status: {data.status}
           </div>
@@ -73,13 +71,12 @@ const EventCard = ({ data, onDelete }) => {
         </div>
       </section>
 
-      {/* Tombol Aksi */}
       <section className="flex flex-col justify-center ml-auto space-y-2 px-3">
         <button
           className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
           onClick={() => navigate(`/update_event/${data.id}`)}
         >
-          <span>Update</span>
+          <span>Perbarui</span>
           <FaPen className="absolute right-3" />
         </button>
         <button
