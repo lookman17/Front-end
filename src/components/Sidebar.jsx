@@ -2,12 +2,27 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Grid2X2, Image, Calendar, Settings } from "lucide-react";
 import Logo from "../components/Logo";
+import { FaSignOutAlt } from "react-icons/fa";
+import '../components/sidebar.css';
+import { useNavigate } from "react-router-dom";
 
 export const Sidebar = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation(); 
 
-  const location = useLocation();
+  const handleLogout = () => {
+    const confirmed = window.confirm("Apakah kamu yakin ingin logout?");
+    if (confirmed) {
+      localStorage.removeItem("sanctum_token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("user_role");
+      setUser(null);
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -44,16 +59,9 @@ export const Sidebar = () => {
     }
   }, []);
 
-  const navItems = [
-    { path: "/Profil", icon: <Grid2X2 />, label: "Profil" },
-    { path: "/gallery", icon: <Image />, label: "Album" },
-    { path: "/acara", icon: <Calendar />, label: "Acara" },
-    { path: "/setting", icon: <Settings />, label: "Pengaturan" },
-  ];
-
   return (
-    <aside className="sticky top-0 flex flex-col space-y-6 shadow-2xl w-[300px] py-12 h-screen bg-white">
-      <section className="flex justify-center">
+    <aside className="sticky top-0 flex flex-col w-[300px] h-screen bg-white shadow-right">
+      <section className="flex justify-center py-6">
         <div className="flex">
           <Logo />
           <div className="px-2 py-3">
@@ -65,7 +73,7 @@ export const Sidebar = () => {
         </div>
       </section>
 
-      <section className="px-2">
+      <div className="flex-1 overflow-y-auto space-y-6 px-2 pb-4">
         <div className="bg-[#016A70] text-white rounded-xl p-4">
           {loading ? (
             <p className="font-semibold text-[20px]">Memuat...</p>
@@ -75,26 +83,41 @@ export const Sidebar = () => {
             </p>
           )}
         </div>
-      </section>
 
-      <section className="px-2 flex flex-col space-y-4">
-        {navItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`flex items-center space-x-4 text-black shadow-lg border border-gray-200 rounded-xl p-3 hover:bg-[#016A70] hover:text-white transition-all ${
-              location.pathname === item.path ? "bg-[#016A70] text-white" : ""
-            } ${
-              item.label === "Pengaturan" && user?.name === "Guest"
-                ? "opacity-0 pointer-events-none"
-                : ""
-            }`}
-          >
-            {item.icon}
-            <p className="text-[15px]">{item.label}</p>
-          </Link>
-        ))}
-      </section>
+        <div className="flex flex-col space-y-4">
+          {[
+            { to: "/profil", icon: <Grid2X2 />, text: "Profil" },
+            { to: "/Gallery", icon: <Image />, text: "Album" },
+            { to: "/acara", icon: <Calendar />, text: "Acara" },
+            ...(user && user.name !== "Guest"
+              ? [{ to: "/setting", icon: <Settings />, text: "Pengaturan" }]
+              : []),
+          ].map(({ to, icon, text }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`flex items-center space-x-4 shadow-lg border border-gray-200 rounded-xl p-3
+        ${
+          location.pathname === to
+            ? "bg-[#016A70] text-white"
+            : "text-black hover:bg-[#016A70] hover:text-white"
+        }`}
+            >
+              {icon}
+              <p className="text-[15px]">{text}</p>
+            </Link>
+          ))}
+
+          {user && user.name !== "Guest" && (
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-6 space-x-6 shadow-lg border border-gray-200 rounded-xl p-3 text-black hover:bg-red-600 hover:text-white transition-colors"
+            >
+              <FaSignOutAlt /> Log Out
+            </button>
+          )}
+        </div>
+      </div>
 
       <section className="flex space-x-2 items-center mt-auto text-white bg-[#016A70] p-10 rounded-t-4xl">
         {user && user.name !== "Guest" ? (

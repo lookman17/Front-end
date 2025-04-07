@@ -3,13 +3,18 @@ import { AxiosError } from "axios";
 import { client } from "../../components/axios";
 import EventCard from "../../components_admin/EventCard";
 import { Link, useNavigate } from "react-router-dom";
-import { FaPlus, FaPen, FaTrash } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
+import Pagination from "../../components/Pagination";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewMode, setViewMode] = useState("acara"); // 'acara' atau 'kategori'
+  const [viewMode, setViewMode] = useState("acara");
+  const [eventPage, setEventPage] = useState(1);
+  const [categoryPage, setCategoryPage] = useState(1);
+
+  const [itemsPerPage] = useState(5);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -29,7 +34,7 @@ const Events = () => {
   const fetchCategories = async () => {
     try {
       const res = await client.get("/api/category");
-      console.log("Category data:", res.data.data); // Log category data for debugging
+      console.log("Category data:", res.data.data);
       setCategories(res.data.data || []);
     } catch (error) {
       console.error("Error fetching categories:", error.message);
@@ -46,13 +51,17 @@ const Events = () => {
   };
 
   const handleDeleteCategory = async (id) => {
-    const isConfirmed = window.confirm("Apakah Anda yakin ingin menghapus kategori ini?");
+    const isConfirmed = window.confirm(
+      "Apakah Anda yakin ingin menghapus kategori ini?"
+    );
     if (!isConfirmed) return;
 
     try {
       const response = await client.delete(`/api/category/${id}`);
       if (response.status === 200) {
-        setCategories((prevCategories) => prevCategories.filter((category) => category.id !== id));
+        setCategories((prevCategories) =>
+          prevCategories.filter((category) => category.id !== id)
+        );
         alert("Kategori berhasil dihapus!");
       }
     } catch (error) {
@@ -61,22 +70,24 @@ const Events = () => {
     }
   };
 
+  const indexOfLastItem = eventPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentEvents = events.slice(indexOfFirstItem, indexOfLastItem);
+
+  const indexOfLastCategory = categoryPage * itemsPerPage;
+  const indexOfFirstCategory = indexOfLastCategory - itemsPerPage;
+  const currentCategories = categories.slice(
+    indexOfFirstCategory,
+    indexOfLastCategory
+  );
+
+  const paginateEvents = (pageNumber) => setEventPage(pageNumber);
+  const paginateCategories = (pageNumber) => setCategoryPage(pageNumber);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col space-y-2 m-12 pb-12">
-        <h1 className="font-semibold text-2xl">Admin Panel</h1>
-        <p>
-          <span className="text-green-600">
-            {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
-          </span>{" "}
-          / {String(new Date().getDate()).padStart(2, "0")} /{" "}
-          <span>
-            {new Date()
-              .toLocaleDateString("id-ID", { month: "long" })
-              .toLowerCase()}
-          </span>{" "}
-          / {new Date().getFullYear()}
-        </p>
+       
 
         <section className="flex flex-col space-y-8 pt-4">
           <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
@@ -87,7 +98,9 @@ const Events = () => {
           <div className="flex space-x-2">
             <button
               className={`px-4 py-2 rounded-md ${
-                viewMode === "acara" ? "bg-[#016A70] text-white" : "bg-gray-200 text-black"
+                viewMode === "acara"
+                  ? "bg-[#016A70] text-white"
+                  : "bg-gray-200 text-black"
               }`}
               onClick={() => setViewMode("acara")}
             >
@@ -95,7 +108,9 @@ const Events = () => {
             </button>
             <button
               className={`px-4 py-2 rounded-md ${
-                viewMode === "kategori" ? "bg-[#016A70] text-white" : "bg-gray-200 text-black"
+                viewMode === "kategori"
+                  ? "bg-[#016A70] text-white"
+                  : "bg-gray-200 text-black"
               }`}
               onClick={() => setViewMode("kategori")}
             >
@@ -103,7 +118,6 @@ const Events = () => {
             </button>
           </div>
 
-  
           {viewMode === "acara" ? (
             <>
               <div className="flex flex-col space-y-2">
@@ -126,14 +140,26 @@ const Events = () => {
                     <div className="dot"></div>
                     <div className="dot"></div>
                   </section>
-                ) : events.length > 0 ? (
-                  events.map((event) => (
-                    <EventCard key={event.id} data={event} onDelete={handleDeleteEvent} />
+                ) : currentEvents.length > 0 ? (
+                  currentEvents.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      data={event}
+                      onDelete={handleDeleteEvent}
+                    />
                   ))
                 ) : (
-                  <div className="text-gray-500">Tidak ada event yang tersedia.</div>
+                  <div className="text-gray-500">
+                    Tidak ada event yang tersedia.
+                  </div>
                 )}
               </div>
+              <Pagination
+                itemsPerPage={itemsPerPage}
+                totalItems={events.length}
+                paginate={paginateEvents}
+                currentPage={eventPage}
+              />
             </>
           ) : (
             <>
@@ -158,15 +184,22 @@ const Events = () => {
                     <div className="dot"></div>
                   </section>
                 ) : categories.length > 0 ? (
-                  categories.map((category) => (
-                    <div key={category.id} className="flex items-center justify-between p-4 border rounded-md bg-[#016A70] text-white">
+                  currentCategories.map((category) => (
+                    <div
+                      key={category.id}
+                      className="flex items-center justify-between p-4 border rounded-md bg-[#016A70] text-white"
+                    >
                       {category.name}
                       <div className="space-x-2">
                         <button
                           className=""
-                          onClick={() => navigate(`/update_category/${category.id}`)}
+                          onClick={() =>
+                            navigate(`/update_category/${category.id}`)
+                          }
                         >
-                          <p className="bg-[#088C93] p-2 rounded-md hover:bg-[#233f40]">Perbarui</p>
+                          <p className="bg-[#088C93] p-2 rounded-md hover:bg-[#233f40]">
+                            Perbarui
+                          </p>
                         </button>
                         <button
                           className="bg-[#088C93] p-2 rounded-md hover:bg-[#233f40]"
@@ -178,8 +211,16 @@ const Events = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="text-gray-500">Tidak ada kategori yang tersedia.</div>
+                  <div className="text-gray-500">
+                    Tidak ada kategori yang tersedia.
+                  </div>
                 )}
+                <Pagination
+                  itemsPerPage={itemsPerPage}
+                  totalItems={categories.length}
+                  paginate={paginateCategories}
+                  currentPage={categoryPage}
+                />
               </div>
             </>
           )}

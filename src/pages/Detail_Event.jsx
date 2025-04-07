@@ -37,20 +37,19 @@ const EventDetail = () => {
     fetchData();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div><section className="dots-container">
+  <div className="dot"></div>
+  <div className="dot"></div>
+  <div className="dot"></div>
+  <div className="dot"></div>
+  <div className="dot"></div>
+  </section></div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className="m-12">
-      <h1 className="font-semibold text-2xl">Detail Event</h1>
-      <p>
-        <span className="text-green-600">
-          {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
-        </span>{" "}/ {String(new Date().getDate()).padStart(2, "0")} /{" "}
-        <span>
-          {new Date().toLocaleDateString("id-ID", { month: "long" }).toLowerCase()}
-        </span>{" "}/ {new Date().getFullYear()}
-      </p>
+          <h1 className="font-semibold text-2xl py-3 text-gray-800">Detail Acara</h1>
+          <hr />
       <div className="py-10 flex flex-col md:flex-row">
         {/* Div Kiri */}
         <div className="md:w-1/2 p-7 bg-gray-50 drop-shadow-lg rounded-[50px]">

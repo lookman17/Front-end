@@ -42,8 +42,8 @@ export const Register = () => {
         <h1 className="font-semibold text-4xl text-center">Hei There</h1>
 
           <section className="mt-6 text-center">
-            <h5 className="text-lg">Don't have an account?</h5>
-            <h5 className="text-lg">Let's make an account!</h5>
+            <h5 className="text-lg">Dont have an account?</h5>
+            <h5 className="text-lg">Lets make an account!</h5>
             <div className="mt-6">
               <img src={logo} alt="Logo" className="w-32 h-32 mx-auto" />
             </div>

@@ -14,7 +14,6 @@ import CreateEvent from "./pages/Admin/Create_Event.jsx";
 import ContentList from "./pages/Admin/Gallery.jsx";
 import UpdateGallery from "./pages/Admin/Update_Gallery";
 import CreateGallery from "./pages/Admin/Create_Gallery.jsx";
-import Dashboard from "./pages/Admin/Beranda.jsx";
 import GalleryDetail from "./pages/Detail_Gallery.jsx";
 import { LayoutSantri } from "./components/LayoutSantri.jsx";
 import UpdateEvent from "./pages/Admin/Update_Event.jsx";
@@ -24,6 +23,10 @@ import CreateCategory from "./pages/Admin/Create_Category.jsx";
 import UpdateCategory from "./pages/Admin/Update_Category.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import { RegisterAdmin } from "./pages/RegisterAdmin.jsx";
+import EditProfil from "./pages/Admin/Update_pencapaian.jsx";
+import CreateProfil from "./pages/Admin/Create_Pencapaian.jsx";
+import ProfilList from "./pages/Admin/Beranda.jsx";
+import PencapaianDetail from "./pages/Detail_Pencapaian.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -37,7 +40,27 @@ createRoot(document.getElementById("root")).render(
           element={
             <PrivateRoute>
               <Layout>
-                <Dashboard />
+                <ProfilList />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/update_pencapaian/:id"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <EditProfil />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profil/create"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <CreateProfil />
               </Layout>
             </PrivateRoute>
           }
@@ -152,6 +175,14 @@ createRoot(document.getElementById("root")).render(
             </PrivateRoute>
           }
         />
+        <Route
+          path="/pencapaian/detail/:id"
+          element={
+            <Layout>
+              <PencapaianDetail />
+            </Layout>
+          }
+        />
 
         {/* Rute untuk Santri */}
         <Route
@@ -159,6 +190,14 @@ createRoot(document.getElementById("root")).render(
           element={
             <LayoutSantri>
               <Beranda />
+            </LayoutSantri>
+          }
+        />
+        <Route
+          path="/profil/profil/pencapaian/detail/:id"
+          element={
+            <LayoutSantri>
+              <PencapaianDetail />
             </LayoutSantri>
           }
         />

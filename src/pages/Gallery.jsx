@@ -3,12 +3,15 @@ import { AxiosError } from "axios";
 import { client } from "../components/axios";
 import { Search } from "lucide-react";
 import { GalleryCardShow } from "../components/GalleryCardShow";
+import Pagination from "../components/Pagination"; 
 import "./Gallery.css";
 
 const ContentList = () => {
   const [contents, setContents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); 
 
   const fetchData = async () => {
     try {
@@ -36,23 +39,15 @@ const ContentList = () => {
     Gallery.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentContents = filteredContents.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col space-y-2 m-12 pb-12">
-        <h1 className="font-semibold text-2xl"> Album</h1>
-        <p>
-          <span className="text-green-600">
-            {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
-          </span>{" "}
-          / {String(new Date().getDate()).padStart(2, "0")} /{" "}
-          <span>
-            {new Date()
-              .toLocaleDateString("id-ID", { month: "long" })
-              .toLowerCase()}
-          </span>{" "}
-          / {new Date().getFullYear()}
-        </p>
-
         <section className="flex flex-col space-y-8 pt-4">
           <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
             <h2 className="font-bold text-4xl">Hi, Santri</h2>
@@ -78,14 +73,21 @@ const ContentList = () => {
                 <div className="dot"></div>
                 <div className="dot"></div>
               </section>
-            ) : filteredContents.length > 0 ? (
-              filteredContents.map((content) => (
+            ) : currentContents.length > 0 ? (
+              currentContents.map((content) => (
                 <GalleryCardShow key={content.id} data={content} />
               ))
             ) : (
               <div className="text-gray-500">No contents available.</div>
             )}
           </div>
+
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            totalItems={filteredContents.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
         </section>
       </div>
     </Suspense>

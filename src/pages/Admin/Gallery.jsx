@@ -4,10 +4,13 @@ import { client } from "../../components/axios";
 import GalleryCard from "../../components_admin/GalleryCard"; // Ensure default export is used
 import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import Pagination from "../../components/Pagination";
 
 const Gallery = () => {
   const [contents, setContents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   const fetchData = async () => {
     try {
@@ -33,20 +36,16 @@ const Gallery = () => {
     setContents((prevContents) => prevContents.filter((content) => content.id !== id));
   };
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentContents = contents.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col space-y-2 m-12 pb-12">
-        <h1 className="font-semibold text-2xl">Album</h1>
-        <p>
-          <span className="text-green-600">
-            {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
-          </span>{" "}
-          / {String(new Date().getDate()).padStart(2, "0")} /{" "}
-          <span>
-            {new Date().toLocaleDateString("id-ID", { month: "long" }).toLowerCase()}
-          </span>{" "}
-          / {new Date().getFullYear()}
-        </p>
+        
         <section className="flex flex-col space-y-8 pt-4">
           <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
             <h2 className="font-bold text-4xl">Hi, Admin</h2>
@@ -64,23 +63,28 @@ const Gallery = () => {
             </div>
           </div>
           <div className="space-y-3">
-            
             {isLoading ? (
               <section className="dots-container">
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
-            </section>
-            ) : contents.length > 0 ? (
-              contents.map((content) => (
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
+                </section>
+            ) : currentContents.length > 0 ? (
+              currentContents.map((content) => (
                 <GalleryCard key={content.id} data={content} onDelete={handleDelete} />
               ))
             ) : (
               <div className="text-gray-500">Tidak ada album</div>
             )}
           </div>
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            totalItems={contents.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
         </section>
       </div>
     </Suspense>

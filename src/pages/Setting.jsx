@@ -146,19 +146,7 @@ const Settings = () => {
 
   return (
     <div className="flex flex-col space-y-4 m-12 pb-12">
-      <h1 className="font-semibold text-2xl">Pengaturan Akun</h1>
-      <p>
-        <span className="text-green-600">
-          {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
-        </span>{" "}
-        / {String(new Date().getDate()).padStart(2, "0")} /{" "}
-        <span>
-          {new Date()
-            .toLocaleDateString("id-ID", { month: "long" })
-            .toLowerCase()}
-        </span>{" "}
-        / {new Date().getFullYear()}
-      </p>
+      
       <section className="flex pt-4 gap-x-8">
         <div className="w-1/3 p-4 h-[600px] bg-white shadow-md rounded-2xl text-center">
           <div className="mb-4 flex flex-col items-center justify-center relative group">

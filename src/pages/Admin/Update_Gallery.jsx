@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { client } from "../../components/axios";
@@ -82,7 +82,7 @@ const UpdateGallery = () => {
         }
       );
 
-      console.log("Server Response:", response.data); // Debugging
+      console.log("Server Response:", response.data);
 
       if (response.status === 200) {
         alert("Data updated successfully!");
@@ -106,7 +106,7 @@ const UpdateGallery = () => {
 
   return (
     <div className="flex flex-col space-y-2 m-12 pb-12">
-      <h1 className="font-bold text-2xl">Update Gallery</h1>
+    
 
       {/* Header */}
       <section className="flex flex-col space-y-8 pt-4">
@@ -116,12 +116,10 @@ const UpdateGallery = () => {
         </div>
       </section>
 
-      {/* Form */}
       <section className="relative flex pt-4">
         <div className="absolute h-[960px] p-20 rounded-2xl text-white bg-[#016A70] z-10"></div>
         <div className="relative w-full ml-[10%] h-full p-28 rounded-4xl bg-white z-20 drop-shadow-2xl">
           <form className="space-y-4" onSubmit={handleSubmit}>
-            {/* Judul */}
             <div>
               <label
                 htmlFor="title"
@@ -140,7 +138,6 @@ const UpdateGallery = () => {
               />
             </div>
 
-            {/* Deskripsi */}
             <div>
               <label
                 htmlFor="description"
@@ -157,7 +154,6 @@ const UpdateGallery = () => {
               ></textarea>
             </div>
 
-            {/* Gambar */}
             <div>
               <label
                 htmlFor="image"
@@ -184,7 +180,6 @@ const UpdateGallery = () => {
               )}
             </div>
 
-            {/* Tombol Submit */}
             <button
               type="submit"
               className="mt-4 inline-flex items-center justify-center px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#088C93] w-full hover:bg-[#065e65]"

@@ -35,23 +35,21 @@ export const Login = () => {
         const checkRes = await client.get("/api/check", {
           headers: { Authorization: `Bearer ${responseData.token}` },
         });
-        
+
         console.log("Check Response Data:", checkRes.data);
-        
 
         const checkResponseData = checkRes.data;
         if (checkResponseData.user?.id) {
           window.localStorage.setItem("user_id", checkResponseData.user.id);
+          localStorage.setItem("user_role", checkResponseData.user.role); 
           window.localStorage.setItem(
             "user",
             JSON.stringify(checkResponseData.user)
           );
-        
-          // Ambil role user
+
           const userRole = checkResponseData.user.role;
-console.log("User Role:", userRole);
- 
-        
+          console.log("User Role:", userRole);
+
           setTimeout(() => {
             setIsLoading(false);
             if (userRole === "member") {
@@ -61,7 +59,6 @@ console.log("User Role:", userRole);
             }
           }, 2000);
         }
-        
       } else {
         alert(responseData.message || "Login failed");
         setIsLoading(false);
@@ -78,7 +75,6 @@ console.log("User Role:", userRole);
         <div className="fixed inset-0 flex items-center justify-center bg-[#016A70] z-50 opacity-90 transition-opacity duration-500">
           <img src={logo} alt="Loading" className="w-40 h-40 animate-pulse" />
         </div>
-        
       )}
 
       <div

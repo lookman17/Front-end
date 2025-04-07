@@ -135,20 +135,7 @@ const UpdateEvent = () => {
 
   return (
     <div className="flex flex-col space-y-2 m-12 pb-12">
-      <h1 className="font-semibold text-2xl">Update Acara</h1>
-      {error && <div className="text-red-500">Error: {error.message}</div>}
-      <p>
-        <span className="text-green-600">
-          {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
-        </span>{" "}
-        / {String(new Date().getDate()).padStart(2, "0")} /{" "}
-        <span>
-          {new Date()
-            .toLocaleDateString("id-ID", { month: "long" })
-            .toLowerCase()}
-        </span>{" "}
-        / {new Date().getFullYear()}
-      </p>
+     
       <section className="flex flex-col space-y-8 pt-4">
         <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
         <h2 className="font-bold text-4xl">Tambah Event</h2>

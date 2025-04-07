@@ -1,5 +1,5 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const EventCardShow = ({ data }) => {
   const navigate = useNavigate();
@@ -13,47 +13,66 @@ const EventCardShow = ({ data }) => {
     });
 
   const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + "...";
-    }
-    return text;
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   };
 
   return (
-    <div className="card flex flex-row w-[900px] border text-white p-3 border-gray-300 m-2 rounded-lg shadow-md bg-[#088C93] transition-transform transform hover:scale-105 hover:shadow-lg">
-      <div className="content w-2/5 p-5 flex flex-col justify-between">
-        <a href="#" onClick={() => navigate(`/detail/acara/${data.id}`)}>
-          <h3 className="title text-2xl font-bold mb-2">{data.name}</h3>
-        </a>
-        <p className="desc text-base mb-4">{truncateText(data.description, 200)}</p>
-      </div>
-      <div className="flex flex-col w-3/5">
-        <div
-          className="image h-40 rounded-2xl bg-cover bg-center transition-opacity hover:opacity-90"
-          style={{
-            backgroundImage: `url(http://localhost:8000/storage/${data.image || "default.jpg"})`,
-          }}
-        ></div>
-        <div className="flex flex-col justify-around items-center p-4 w-full">
-          <a
-            className="action bg-[#016A70] p-2 rounded-4xl w-full text-center border border-white font-semibold mb-2 transition-colors hover:bg-[#024a4d]"
-            href="#"
+    <div className="flex w-full max-w-4xl rounded-xl overflow-hidden shadow-lg bg-[#016A70] hover:shadow-xl transition-transform transform hover:scale-[1.02] m-4">
+      {/* Gambar */}
+      <div
+        className="w-1/3 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(http://localhost:8000/storage/${data.image || "default.jpg"})`,
+          minHeight: "220px",
+        }}
+      ></div>
+
+      {/* Konten */}
+      <div className="w-2/3 p-6 flex flex-col justify-between">
+        <div>
+          <h3
             onClick={() => navigate(`/detail/acara/${data.id}`)}
+            className="text-2xl font-bold text-white cursor-pointer hover:underline"
           >
-            Baca Selengkapnya <span aria-hidden="true">→</span>
-          </a>
-          <div className="flex flex-row justify-between items-center w-full">
-            <p className="status bg-yellow-300 text-white p-1 w-60 rounded-md font-semibold text-center">
+            {data.name}
+          </h3>
+          <p className="text-gray-200 mt-2 text-sm">
+            {truncateText(data.description, 200)}
+          </p>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-2">
+          <button
+            onClick={() => navigate(`/detail/acara/${data.id}`)}
+            className="bg-teal-600 text-white py-2 px-4 rounded-full font-semibold hover:bg-teal-700 transition-colors"
+          >
+            Baca Selengkapnya →
+          </button>
+
+          <div className="flex flex-wrap gap-3 mt-2">
+            <span className="bg-yellow-400 text-white px-3 py-1 rounded-md text-sm font-medium">
               {data.status}
-            </p>
-            <p className="date ml-4 p-1 rounded-4xl w-60 bg-green-600 text-white text-center">
+            </span>
+            <span className="bg-green-600 text-white px-3 py-1 rounded-md text-sm font-medium">
               📅 {formatDate(data.date)}
-            </p>
+            </span>
           </div>
         </div>
       </div>
     </div>
   );
+};
+
+EventCardShow.propTypes = {
+  data: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    image: PropTypes.string,
+    status: PropTypes.string.isRequired,
+    date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])
+      .isRequired,
+  }).isRequired,
 };
 
 export default EventCardShow;
