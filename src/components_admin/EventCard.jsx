@@ -1,6 +1,7 @@
 import React from "react";
 import { FaPen, FaTrash, FaInfoCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const EventCard = ({ data, onDelete }) => {
   const navigate = useNavigate();
@@ -96,6 +97,22 @@ const EventCard = ({ data, onDelete }) => {
       </section>
     </div>
   );
+};
+
+// Validasi properti dengan PropTypes
+EventCard.propTypes = {
+  data: PropTypes.shape({
+    id: PropTypes.number.isRequired, // ID wajib
+    image: PropTypes.string, // Gambar opsional
+    name: PropTypes.string.isRequired, // Nama wajib
+    description: PropTypes.string, // Deskripsi opsional
+    status: PropTypes.string.isRequired, // Status wajib
+    created_at: PropTypes.string.isRequired, // Tanggal dibuat wajib
+    user: PropTypes.shape({
+      username: PropTypes.string, // Username opsional
+    }),
+  }).isRequired,
+  onDelete: PropTypes.func.isRequired, // Fungsi hapus wajib
 };
 
 export default EventCard;

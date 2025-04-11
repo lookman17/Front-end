@@ -8,7 +8,7 @@ const PencapaianDetail = () => {
     name: "",
     description: "",
     image: "",
-    created_at: "", // Added field for creation date
+    created_at: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,19 +32,8 @@ const PencapaianDetail = () => {
 
   return (
     <div className="m-12">
-      <h1 className="font-semibold text-2xl">Detail Album</h1>
-      <p>
-        <span className="text-green-600">
-          {new Date().toLocaleDateString("id-ID", { weekday: "long" })}
-        </span>{" "}
-        / {String(new Date().getDate()).padStart(2, "0")} /{" "}
-        <span>
-          {new Date()
-            .toLocaleDateString("id-ID", { month: "long" })
-            .toLowerCase()}
-        </span>{" "}
-        / {new Date().getFullYear()}
-      </p>
+      <h1 className="font-semibold text-2xl">Detail Pencapaian</h1>
+     
       <div className="py-10">
         {achievementData.image && (
           <img

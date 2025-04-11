@@ -1,11 +1,10 @@
-import React from "react";
 import { FaPen, FaTrash, FaInfoCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const GalleryCard = ({ data, onDelete }) => {
   const navigate = useNavigate();
 
-  // Fungsi untuk memformat tanggal
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString("id-ID", {
       weekday: "long",
@@ -96,6 +95,21 @@ const GalleryCard = ({ data, onDelete }) => {
       </section>
     </div>
   );
+};
+
+// Definisi PropTypes untuk validasi properti
+GalleryCard.propTypes = {
+  data: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    image: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    created_at: PropTypes.string.isRequired,
+    user: PropTypes.shape({
+      username: PropTypes.string,
+    }),
+  }).isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default GalleryCard;

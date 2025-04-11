@@ -174,12 +174,12 @@ const Settings = () => {
               {user ? user.username : "Guest"}
             </p>
           </div>
-          <button
+          {/*<button
             onClick={handleLogout}
             className="mt-4 px-6 py-2 w-full rounded-lg shadow-lg flex items-center justify-center gap-2 hover:bg-gray-100 ease-in-out"
           >
             <FaSignOutAlt /> Log Out
-          </button>
+          </button>*/}
         </div>
 
         <div className="w-2/3 p-10 bg-white rounded-2xl shadow-md">

@@ -1,6 +1,7 @@
 import React from "react";
 import { FaPen, FaTrash, FaInfoCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const ProfileCard = ({ profile, onDelete }) => {
   const navigate = useNavigate();
@@ -84,6 +85,17 @@ const ProfileCard = ({ profile, onDelete }) => {
       </section>
     </div>
   );
+};
+
+// Tambahkan PropTypes untuk validasi
+ProfileCard.propTypes = {
+  profile: PropTypes.shape({
+    id: PropTypes.number.isRequired, // ID profil
+    image: PropTypes.string, // Gambar profil (opsional)
+    name: PropTypes.string.isRequired, // Nama wajib
+    deskripsi: PropTypes.string, // Deskripsi (opsional)
+  }).isRequired,
+  onDelete: PropTypes.func.isRequired, // Fungsi penghapusan wajib
 };
 
 export default ProfileCard;

@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { client } from "../../components/axios";
-import GalleryCard from "../../components_admin/GalleryCard"; // Ensure default export is used
+import GalleryCard from "../../components_admin/GalleryCard"; // Pastikan ini adalah default export
 import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import Pagination from "../../components/Pagination";
@@ -10,26 +10,37 @@ const Gallery = () => {
   const [contents, setContents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
-  const fetchData = async () => {
-    try {
-      const res = await client.get("/api/content");
-      console.log("Full API Response:", res.data);
-      const data = Array.isArray(res.data) ? res.data : [];
-      console.log("Parsed Contents:", data);
-      setContents(data);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error("Error fetching data:", error.message);
-      }
-    } finally {
-      setIsLoading(false);
+  const updateItemsPerPage = () => {
+    if (window.innerWidth < 768) {
+      setItemsPerPage(3); // Jumlah item lebih sedikit untuk layar kecil
+    } else {
+      setItemsPerPage(5); // Jumlah item standar untuk layar besar
     }
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await client.get("/api/content");
+        console.log("Full API Response:", res.data);
+        const data = Array.isArray(res.data) ? res.data : [];
+        console.log("Parsed Contents:", data);
+        setContents(data);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error("Error fetching data:", error.message);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     fetchData();
+    window.addEventListener("resize", updateItemsPerPage);
+    updateItemsPerPage(); // Check awal ukuran layar
+    return () => window.removeEventListener("resize", updateItemsPerPage);
   }, []);
 
   const handleDelete = (id) => {
@@ -45,7 +56,6 @@ const Gallery = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col space-y-2 m-12 pb-12">
-        
         <section className="flex flex-col space-y-8 pt-4">
           <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
             <h2 className="font-bold text-4xl">Hi, Admin</h2>
@@ -70,7 +80,7 @@ const Gallery = () => {
                 <div className="dot"></div>
                 <div className="dot"></div>
                 <div className="dot"></div>
-                </section>
+              </section>
             ) : currentContents.length > 0 ? (
               currentContents.map((content) => (
                 <GalleryCard key={content.id} data={content} onDelete={handleDelete} />

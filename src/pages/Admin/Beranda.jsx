@@ -48,7 +48,7 @@ const ProfilList = () => {
         <section className="flex flex-col space-y-8 pt-4">
           <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
             <h2 className="font-bold text-4xl">Hi, Admin</h2>
-            <p>Siapkah menambah profil hari ini?</p>
+            <p>Siapkah menambah Pencapaian hari ini?</p>
           </div>
 
           <div className="flex flex-col space-y-2">

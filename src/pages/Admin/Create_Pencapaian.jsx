@@ -48,8 +48,8 @@ const CreateProfil = () => {
 
       <section className="flex flex-col space-y-8 pt-4">
         <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
-          <h2 className="font-bold text-4xl">Tambah Profil</h2>
-          <p>Siap membuat profil baru?</p>
+          <h2 className="font-bold text-4xl">Tambah Pencapaian</h2>
+          <p>Siap menambah Pencapaian baru?</p>
         </div>
       </section>
 
@@ -59,7 +59,7 @@ const CreateProfil = () => {
           <form className="space-y-5" onSubmit={handleSubmit} encType="multipart/form-data">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Nama Profil
+                Judul Pencapaian
               </label>
               <input
                 id="name"
@@ -89,7 +89,7 @@ const CreateProfil = () => {
 
             <div>
               <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                Gambar (Opsional)
+                Gambar
               </label>
               <input
                 id="image"
