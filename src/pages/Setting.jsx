@@ -147,8 +147,9 @@ const Settings = () => {
   return (
     <div className="flex flex-col space-y-4 m-12 pb-12">
       
-      <section className="flex pt-4 gap-x-8">
-        <div className="w-1/3 p-4 h-[600px] bg-white shadow-md rounded-2xl text-center">
+      <section className="flex flex-col lg:flex-row pt-4 gap-8">
+  <div className="w-full lg:w-1/3 p-4 bg-white shadow-md rounded-2xl text-center mb-4 lg:mb-0">
+
           <div className="mb-4 flex flex-col items-center justify-center relative group">
             <label htmlFor="photo-upload" className="cursor-pointer">
               <img
@@ -182,7 +183,8 @@ const Settings = () => {
           </button>*/}
         </div>
 
-        <div className="w-2/3 p-10 bg-white rounded-2xl shadow-md">
+        <div className="w-full lg:w-2/3 p-6 md:p-10 bg-white rounded-2xl shadow-md">
+
           <p className="font-semibold text-2xl">Informasi Pribadi</p>
           <form className="space-y-4 py-6" onSubmit={handleSubmit}>
             <div className="flex space-x-4">

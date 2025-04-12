@@ -53,16 +53,16 @@ const ContentList = () => {
             <h2 className="font-bold text-4xl">Hi, Santri</h2>
             <p>Berikut ini adalah album atau kegiatan TPQ</p>
           </div>
-          <div className="flex items-center p-2 w-64 border rounded-lg shadow-lg bg-white ml-auto">
-            <Search size={20} className="mr-2 text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-grow focus:outline-none"
-            />
-          </div>
+          <div className="flex items-center border p-2 rounded-md bg-white shadow-md w-full md:w-72">
+              <Search className="text-gray-500 mr-2" size={20} />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full focus:outline-none text-sm"
+              />
+            </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {isLoading ? (

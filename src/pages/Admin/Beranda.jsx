@@ -4,6 +4,7 @@ import { client } from "../../components/axios";
 import CardProfile from "../../components_admin/ProfilCard";
 import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import { Search } from "lucide-react";
 import Pagination from "../../components/Pagination";
 
 const ProfilList = () => {
@@ -11,13 +12,13 @@ const ProfilList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState("");
 
+  // Fetch profiles from API
   const fetchProfiles = async () => {
     try {
       const res = await client.get("/api/profil");
-      console.log("API Response:", res.data);
       const data = Array.isArray(res.data) ? res.data : res.data?.data || [];
-      console.log("Parsed Profiles:", data);
       setProfiles(data);
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -36,9 +37,14 @@ const ProfilList = () => {
     setProfiles((prev) => prev.filter((profile) => profile.id !== id));
   };
 
+  // Filter berdasarkan pencarian
+  const filteredProfiles = profiles.filter((item) =>
+    item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProfiles = profiles.slice(indexOfFirstItem, indexOfLastItem);
+  const currentProfiles = filteredProfiles.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -51,18 +57,31 @@ const ProfilList = () => {
             <p>Siapkah menambah Pencapaian hari ini?</p>
           </div>
 
-          <div className="flex flex-col space-y-2">
-            <p>Contents</p>
-            <div className="flex space-x-2 text-white">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+            <div className="flex flex-col space-y-2">
+              <p>Contents</p>
               <Link
-                to="/profil/create"
+                to="/Create/Gallery"
                 className="inline-flex items-center justify-center px-4 py-2 bg-[#016A70] text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-[#014F55]"
               >
-                <FaPlus className="mr-2" /> Tambah Pencapaian
+                <FaPlus className="mr-2" /> Add New Content
               </Link>
+            </div>
+
+            {/* Input Search */}
+            <div className="flex items-center border p-2 rounded-md bg-white shadow-md w-full md:w-72">
+              <Search className="text-gray-500 mr-2" size={20} />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full focus:outline-none text-sm"
+              />
             </div>
           </div>
 
+          {/* Daftar Profil */}
           <div className="space-y-3">
             {isLoading ? (
               <section className="dots-container">
@@ -81,13 +100,16 @@ const ProfilList = () => {
                 />
               ))
             ) : (
-              <div className="text-gray-500">Tidak ada data profil</div>
+              <div className="text-gray-500 text-center">
+                Tidak ada profil ditemukan sesuai pencarian.
+              </div>
             )}
           </div>
 
+          {/* Pagination */}
           <Pagination
             itemsPerPage={itemsPerPage}
-            totalItems={profiles.length}
+            totalItems={filteredProfiles.length}
             paginate={paginate}
             currentPage={currentPage}
           />

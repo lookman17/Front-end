@@ -45,17 +45,19 @@ const Beranda = () => {
   }, []);
 
   return (
-    <div className="flex flex-col m-12 pb-12">
+    <div className="flex flex-col px-4 md:px-12 pb-12">
 
-      <div className="flex justify-center items-center w-full mt-12">
-        <div className=" p-10 bg-white shadow-2xl rounded-4xl w-1/2 text-center">
+<div className="flex justify-center items-center w-full mt-12">
+  <div className="p-6 md:p-10 bg-white shadow-2xl rounded-4xl w-full max-w-xl text-center">
+
           <p className=" text-3xl font-semibold">Profil</p>
           <p className=" text-3xl font-semibold">TPQ Darul Ulum</p>
         </div>
       </div>
 
       <div className="flex justify-center items-center w-full mt-12">
-        <div className="bg-[#016A70] p-20 rounded-4xl shadow-2xl w-[800px] text-center">
+  <div className="bg-[#016A70] px-4 py-10 md:p-20 rounded-4xl shadow-2xl w-full max-w-3xl text-center">
+
           <p className="text-white text-3xl font-semibold">
             TPQ Darul Ulum berdiri pada tanggal 2015, di TPQ ini metode
             pembelajarannya adalah Qiraati, dan TPQ ini yang pertama kali
@@ -64,7 +66,8 @@ const Beranda = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-8 w-full mt-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-8">
+
         <div className="p-0 rounded-2xl bg-[#016A70] text-center">
           <img
             src={santri1}
@@ -117,15 +120,15 @@ const Beranda = () => {
         </div>
       </div>
 
-      <div className="flex w-full mt-12 py-10">
-        <div className="w-1/2 bg-[#088C93] flex items-center justify-center p-24 rounded-l-2xl drop-shadow-lg">
-          <img
-            src={logo}
-            alt="Santri Image"
-            className="w-56 h-56 object-cover rounded-2xl"
-          />
-        </div>
-        <div className="w-1/2 bg-white p-8 rounded-r-2xl drop-shadow-lg text-[#016A70]">
+      <div className="flex flex-col lg:flex-row w-full mt-12 py-10 gap-6">
+  <div className="w-full lg:w-1/2 bg-[#088C93] flex items-center justify-center p-10 rounded-2xl drop-shadow-lg">
+    <img
+      src={logo}
+      alt="Santri Image"
+      className="w-40 h-40 md:w-56 md:h-56 object-cover rounded-2xl"
+    />
+  </div>
+  <div className="w-full lg:w-1/2 bg-white p-6 md:p-8 rounded-2xl drop-shadow-lg text-[#016A70]">
           <p className="text-2xl font-semibold">Deskripsi Santri</p>
           <p className="mt-4">
             Santri adalah seorang pelajar dalam pendidikan Islam yang menempuh
@@ -142,7 +145,8 @@ const Beranda = () => {
           Pencapaian TPQ Darul Ulum
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
         {currentItems.length > 0 &&
   currentItems.map((item, index) => (
     <PencapaianCard key={index} item={item} />
@@ -196,9 +200,10 @@ const Beranda = () => {
           >
             Jl. Bokor
           </a>
-          <div className="mt-4">
-            <div className="mt-4">
+          <div className="mt-12 w-full bg-[#016A70] p-6 md:p-10 rounded-4xl">
+          <div className="bg-white p-4 md:p-6 rounded-2xl text-center">
               <iframe
+              className="w-full h-[300px] rounded-2xl"
                 src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3950.946190287213!2d112.7362595750072!3d-8.004486492021488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zOMKwMDAnMTYuMiJTIDExMsKwNDQnMTkuOCJF!5e0!3m2!1sen!2sid!4v1740319589424!5m2!1sen!2sid"
                 width="100%"
                 height="300"

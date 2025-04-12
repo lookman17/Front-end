@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import Pagination from "../../components/Pagination";
 
+import { Search } from "lucide-react";
+
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -13,9 +15,9 @@ const Events = () => {
   const [viewMode, setViewMode] = useState("acara");
   const [eventPage, setEventPage] = useState(1);
   const [categoryPage, setCategoryPage] = useState(1);
-
   const [itemsPerPage] = useState(5);
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchData = async () => {
     try {
@@ -70,9 +72,13 @@ const Events = () => {
     }
   };
 
+  const filteredEvents = events.filter((event) =>
+    event.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const indexOfLastItem = eventPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentEvents = events.slice(indexOfFirstItem, indexOfLastItem);
+  const currentEvents = filteredEvents.slice(indexOfFirstItem, indexOfLastItem);
 
   const indexOfLastCategory = categoryPage * itemsPerPage;
   const indexOfFirstCategory = indexOfLastCategory - itemsPerPage;
@@ -87,8 +93,6 @@ const Events = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col space-y-2 m-12 pb-12">
-       
-
         <section className="flex flex-col space-y-8 pt-4">
           <div className="flex flex-col space-y-4 p-16 rounded-2xl text-white bg-[#016A70]">
             <h2 className="font-bold text-4xl">Hi, Admin</h2>
@@ -120,17 +124,28 @@ const Events = () => {
 
           {viewMode === "acara" ? (
             <>
-              <div className="flex flex-col space-y-2">
-                <p>Acara</p>
-                <div className="flex space-x-2 text-white">
-                  <Link
-                    to="/Create/Event"
-                    className="inline-flex items-center justify-center px-4 py-2 bg-[#016A70] text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-[#014F55]"
-                  >
-                    <FaPlus className="mr-2" /> Tambahkan Acara
-                  </Link>
-                </div>
-              </div>
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+            <div className="flex flex-col space-y-2">
+              <p>Contents</p>
+              <Link
+                to="/Create/Event"
+                className="inline-flex items-center justify-center px-4 py-2 bg-[#016A70] text-white rounded-md transition-colors duration-300 ease-in-out hover:bg-[#014F55]"
+              >
+                <FaPlus className="mr-2" /> Add New Content
+              </Link>
+            </div>
+            {/* Search Input */}
+            <div className="flex items-center border p-2 rounded-md bg-white shadow-md w-full md:w-72">
+              <Search className="text-gray-500 mr-2" size={20} />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full focus:outline-none text-sm"
+              />
+            </div>
+          </div>
               <div className="space-y-3">
                 {isLoading ? (
                   <section className="dots-container">
@@ -156,7 +171,7 @@ const Events = () => {
               </div>
               <Pagination
                 itemsPerPage={itemsPerPage}
-                totalItems={events.length}
+                totalItems={filteredEvents.length}
                 paginate={paginateEvents}
                 currentPage={eventPage}
               />
@@ -192,7 +207,6 @@ const Events = () => {
                       {category.name}
                       <div className="space-x-2">
                         <button
-                          className=""
                           onClick={() =>
                             navigate(`/update_category/${category.id}`)
                           }
@@ -219,7 +233,6 @@ const Events = () => {
                   itemsPerPage={itemsPerPage}
                   totalItems={categories.length}
                   paginate={paginateCategories}
-                  currentPage={categoryPage}
                 />
               </div>
             </>

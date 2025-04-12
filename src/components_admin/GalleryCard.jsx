@@ -43,57 +43,62 @@ const GalleryCard = ({ data, onDelete }) => {
   };
 
   return (
-    <div className="flex w-full h-52 text-white bg-[#016A70] shadow-2xl rounded-xl hover:scale-102 transition-transform duration-300">
-      <section className="flex-none w-1/4">
-        <img
-          src={`http://localhost:8000/storage/${data.image || "default.jpg"}`}
-          alt="Content"
-          className="object-cover w-full h-full"
-          onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} 
-        />
-      </section>
-      <section className="flex flex-col flex-grow ml-7 space-y-3">
-        <div className="p-3 flex-grow">
-          <h2 className="text-xl font-bold">{data.title}</h2>
-          <p className="text-sm opacity-80 w-96 overflow-hidden text-ellipsis" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-            {data.description}
-          </p>
-        </div>
+    <div className="flex flex-col md:flex-row w-full h-auto md:h-52 text-white bg-[#016A70] shadow-2xl rounded-xl hover:scale-102 transition-transform duration-300 overflow-hidden">
+  {/* Gambar */}
+  <section className="w-full md:w-1/4 h-52 md:h-auto flex-shrink-0">
+    <img
+      src={`http://localhost:8000/storage/${data.image || "default.jpg"}`}
+      alt="Content"
+      className="object-cover w-full h-full"
+      onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} 
+    />
+  </section>
 
-        {/* Informasi Postingan */}
-        <div className="bg-[#088C93] text-sm opacity-80 p-2 rounded-lg mr-7 mb-3">
-          <p className="text-[#14FF8D]">
-            Diposting oleh:{" "}
-            <span>{data.user?.username || "Tidak diketahui"}</span>
-          </p>
-          <p>{formatDate(data.created_at)}</p>
-        </div>
-      </section>
-
-      <section className="flex flex-col justify-center ml-auto space-y-2 p-5">
-        <button
-          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
-          onClick={() => navigate(`/update_gallery/${data.id}`)}
-        >
-          <span>Perbarui</span>
-          <FaPen className="absolute right-3" />
-        </button>
-        <button
-          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
-          onClick={handleDelete}
-        >
-          <span>Hapus</span>
-          <FaTrash className="absolute right-3" />
-        </button>
-        <button
-          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
-          onClick={() => navigate(`/detail_gallery/${data.id}`)}
-        >
-          <span>Detail</span>
-          <FaInfoCircle className="absolute right-3" />
-        </button>
-      </section>
+  {/* Konten */}
+  <section className="flex flex-col flex-grow p-4 md:ml-7 space-y-3">
+    <div className="flex-grow">
+      <h2 className="text-lg md:text-xl font-bold">{data.title}</h2>
+      <p className="text-sm opacity-80 line-clamp-2">
+        {data.description}
+      </p>
     </div>
+
+    {/* Info Postingan */}
+    <div className="bg-[#088C93] text-xs md:text-sm opacity-80 p-2 rounded-lg">
+      <p className="text-[#14FF8D]">
+        Diposting oleh:{" "}
+        <span>{data.user?.username || "Tidak diketahui"}</span>
+      </p>
+      <p>{formatDate(data.created_at)}</p>
+    </div>
+  </section>
+
+  {/* Tombol Aksi */}
+  <section className="flex md:flex-col justify-center items-center md:items-end gap-2 p-4 md:pr-5 md:pl-0">
+    <button
+      className="relative flex items-center justify-between px-6 md:px-10 py-2 md:py-3 bg-[#088C93] rounded-lg w-full md:w-32 hover:bg-[#6bc4c9] transition-all"
+      onClick={() => navigate(`/update_gallery/${data.id}`)}
+    >
+      <span>Perbarui</span>
+      <FaPen className="ml-2 md:absolute md:right-3" />
+    </button>
+    <button
+      className="relative flex items-center justify-between px-6 md:px-10 py-2 md:py-3 bg-[#088C93] rounded-lg w-full md:w-32 hover:bg-[#6bc4c9] transition-all"
+      onClick={handleDelete}
+    >
+      <span>Hapus</span>
+      <FaTrash className="ml-2 md:absolute md:right-3" />
+    </button>
+    <button
+      className="relative flex items-center justify-between px-6 md:px-10 py-2 md:py-3 bg-[#088C93] rounded-lg w-full md:w-32 hover:bg-[#6bc4c9] transition-all"
+      onClick={() => navigate(`/detail_gallery/${data.id}`)}
+    >
+      <span>Detail</span>
+      <FaInfoCircle className="ml-2 md:absolute md:right-3" />
+    </button>
+  </section>
+</div>
+
   );
 };
 

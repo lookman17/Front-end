@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 const EventCard = ({ data, onDelete }) => {
   const navigate = useNavigate();
 
-  // Fungsi untuk memformat tanggal
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString("id-ID", {
       weekday: "long",
@@ -16,7 +15,6 @@ const EventCard = ({ data, onDelete }) => {
     });
   };
 
-  // Fungsi untuk menangani penghapusan event
   const handleDelete = async () => {
     const isConfirmed = window.confirm(
       "Apakah Anda yakin ingin menghapus konten ini?"
@@ -46,73 +44,77 @@ const EventCard = ({ data, onDelete }) => {
   };
 
   return (
-    <div className="relative flex w-full h-52 text-white bg-[#016A70] shadow-2xl rounded-xl hover:scale-102 transition-transform duration-300">
+    <div className="flex flex-col md:flex-row w-full bg-[#016A70] text-white shadow-2xl rounded-xl overflow-hidden hover:scale-102 transition-transform duration-300">
       
-      <section className="flex-none w-1/4 h-auto">
+      {/* Gambar */}
+      <div className="w-full md:w-1/4 h-64 md:h-auto">
         <img
           src={`http://localhost:8000/storage/${data.image || "default.jpg"}`}
           alt="Event"
           className="object-cover w-full h-full"
-          onError={(e) => { e.target.src = "http://localhost:8000/storage/default.jpg"; }} // Tambahkan fallback image jika gambar tidak ditemukan
+          onError={(e) => {
+            e.target.src = "http://localhost:8000/storage/default.jpg";
+          }}
         />
-      </section>
+      </div>
 
-      <section className="flex flex-col flex-grow ml-7 justify-between">
-        <div className="p-2 flex-grow">
-          <h2 className="text-xl font-bold">{data.name}</h2>
-          <p className="text-sm opacity-80 w-96 line-clamp-3">{data.description}</p>
-        </div>
+      {/* Konten */}
+      <div className="flex flex-col flex-grow p-4 space-y-3">
+        <h2 className="text-xl font-bold">{data.name}</h2>
+        <p className="text-sm opacity-80 line-clamp-3">{data.description}</p>
 
-        <div className="relative bg-[#088C93] text-sm opacity-80 p-3 rounded-lg mr-7 mb-3">
-          <div className=" bg-green-500 text-white text-xs px-4 py-1 rounded-3xl shadow-md w-max">
+        <div className="bg-[#088C93] text-sm opacity-80 p-3 rounded-lg">
+          <div className="bg-green-500 text-white text-xs px-4 py-1 rounded-3xl shadow-md w-max mb-2">
             Status: {data.status}
           </div>
-          <p className="text-[#14FF8D] mt-3">Diposting oleh: <span>{data.user?.username || "Tidak diketahui"}</span></p>
+          <p className="text-[#14FF8D]">
+            Diposting oleh: <span>{data.user?.username || "Tidak diketahui"}</span>
+          </p>
           <p>{formatDate(data.created_at)}</p>
         </div>
-      </section>
+      </div>
 
-      <section className="flex flex-col justify-center ml-auto space-y-2 px-3">
+      {/* Tombol Aksi */}
+      <div className="flex flex-row md:flex-col justify-center items-center gap-2 p-4 md:w-1/5">
         <button
-          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
+          className="relative flex justify-between items-center px-6 py-2 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9]"
           onClick={() => navigate(`/update_event/${data.id}`)}
         >
           <span>Perbarui</span>
-          <FaPen className="absolute right-3" />
+          <FaPen className="ml-2" />
         </button>
         <button
-          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
+          className="relative flex justify-between items-center px-6 py-2 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9]"
           onClick={handleDelete}
         >
           <span>Hapus</span>
-          <FaTrash className="absolute right-3" />
+          <FaTrash className="ml-2" />
         </button>
         <button
-          className="relative flex justify-between items-center px-10 py-3 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9] ease-in-out"
+          className="relative flex justify-between items-center px-6 py-2 bg-[#088C93] rounded-lg w-full hover:bg-[#6bc4c9]"
           onClick={() => navigate(`/detail_event/${data.id}`)}
         >
           <span>Detail</span>
-          <FaInfoCircle className="absolute right-3" />
+          <FaInfoCircle className="ml-2" />
         </button>
-      </section>
+      </div>
     </div>
   );
 };
 
-// Validasi properti dengan PropTypes
 EventCard.propTypes = {
   data: PropTypes.shape({
-    id: PropTypes.number.isRequired, // ID wajib
-    image: PropTypes.string, // Gambar opsional
-    name: PropTypes.string.isRequired, // Nama wajib
-    description: PropTypes.string, // Deskripsi opsional
-    status: PropTypes.string.isRequired, // Status wajib
-    created_at: PropTypes.string.isRequired, // Tanggal dibuat wajib
+    id: PropTypes.number.isRequired,
+    image: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    status: PropTypes.string.isRequired,
+    created_at: PropTypes.string.isRequired,
     user: PropTypes.shape({
-      username: PropTypes.string, // Username opsional
+      username: PropTypes.string,
     }),
   }).isRequired,
-  onDelete: PropTypes.func.isRequired, // Fungsi hapus wajib
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default EventCard;
